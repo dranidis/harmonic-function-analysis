@@ -12,6 +12,36 @@
  * romanAnalyzer.analyze(['Dm7', 'G7', 'Cmaj7', 'A7'], 'C');
  * // returns ['ii7', 'V7', 'Imaj7', 'V7/ii']
  */
+class Chord {
+  input: string;
+  romanNumeral: string;
+  harmonicFunction: string[];
+
+  constructor(input: string, romanNumeral: string) {
+    this.input = input;
+    this.romanNumeral = romanNumeral;
+    this.harmonicFunction = [];
+  }
+
+  addHarmonicFunction(harmonicFunction: string) {
+    this.harmonicFunction.push(harmonicFunction);
+  }
+
+  getHarmonicFunction() {
+    if (this.harmonicFunction.length === 0) { return "?"; }
+    return this.harmonicFunction[0];
+  }
+
+  analyzeDiatonic(): void {
+    // diatonic chords
+    // I, ii, iii, IV, V, vi, viio
+    // I, iim7, iiim7, IV, V, vim7, viio7
+    const diatonicChords = ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'viio', 'iim7', 'iiim7', 'vim7', 'viio7', 'V7', 'ivm7'];
+    if (diatonicChords.includes(this.romanNumeral)) {
+      this.addHarmonicFunction(this.romanNumeral);
+    }
+ }
+}
 
 export class ChordRomanAnalyzer {
   private key: string;
@@ -33,7 +63,7 @@ export class ChordRomanAnalyzer {
     this.options = {secondaryDominants : false};
   }
 
-  setOptions(options: {secondaryDominants: boolean}) {
+  setOptions(options: {secondaryDominants: boolean}) : void {
     this.options = options;
   }
 
@@ -41,29 +71,34 @@ export class ChordRomanAnalyzer {
    * Analyze a sequence of chords and determine their roman numeral representation
    *
    * @method analyze
-   * @param {string[]} chords - The sequence of chords to analyze
+   * @param {string[]} chordStrings - The sequence of chords to analyze
    * @param {string} key - The key of the sequence of chords
    * @returns {string[]} The roman numeral representation of the sequence of chords
    */
-  analyze(chords: string[], key: string): string[] {
+  analyze(chordStrings: string[], key: string): string[] {
     this.key = key;
     this.scale = this.getScale(this.key);
     // console.log('key:', this.key);
     // console.log('scale:', this.scale);
-    const romanNumerals = chords.map((chord) => this.getRomanNumeral(chord));
+    const analysis = chordStrings.map((chortStr) => this.getRomanNumeral(chortStr));
+
+    analysis.forEach((chord) => {
+      chord.analyzeDiatonic();
+    });
 
     if (this.options.secondaryDominants) {
-      return this.identifySecondaryDominants(romanNumerals);
+      return this.identifySecondaryDominants(analysis).map((chord) => chord.getHarmonicFunction());
     }
 
-    return romanNumerals;
+    return analysis.map((chord) => chord.romanNumeral);
   }
+
 
   /** For each roman numeral in the array examine if 
    * it is a secondary dominant and replace it with the
    * secondary dominant notation
     */
-  private identifySecondaryDominants(romanNumerals: string[]): string[] {
+  private identifySecondaryDominants(chords: Chord[]): Chord[] {
     const secondaryDominantsMap = new Map<string, string>();
     secondaryDominantsMap.set('VI7', 'V7/ii');
     secondaryDominantsMap.set('VII7', 'V7/iii');
@@ -72,7 +107,7 @@ export class ChordRomanAnalyzer {
     secondaryDominantsMap.set('III7', 'V7/vi');
     secondaryDominantsMap.set('#ivo7', 'iio7/iii');
     secondaryDominantsMap.set('vm7', 'iim7/IV');
-    secondaryDominantsMap.set('viio7', 'iio7/vi');
+    // secondaryDominantsMap.set('viio7', 'iio7/vi');
     secondaryDominantsMap.set('bVII7', 'BD7'); // also V7/bIII
     secondaryDominantsMap.set('bII7', 'TT7'); // also V7/bV
     secondaryDominantsMap.set('bIII7', 'TT7/ii'); // also V7/bVI
@@ -81,8 +116,11 @@ export class ChordRomanAnalyzer {
     secondaryDominantsMap.set('bV7', 'TT7/IV'); // also V7/VII (rare?)
     secondaryDominantsMap.set('biiim7', 'TTm7/V');
 
-    return romanNumerals.map((romanNumeral) => {
-      return secondaryDominantsMap.get(romanNumeral) || romanNumeral;
+    return chords.map((chord) => {
+      if (secondaryDominantsMap.has(chord.romanNumeral)) {
+        chord.addHarmonicFunction(secondaryDominantsMap.get(chord.romanNumeral) || '');
+      }
+      return chord;
     });
   }
 
@@ -90,12 +128,12 @@ export class ChordRomanAnalyzer {
    * Get the roman numeral representation of a chord
    *
    * @method getRomanNumeral
-   * @param {string} chord - The chord to analyze
+   * @param {string} inputChord - The chord to analyze
    * @returns {string} The roman numeral representation of the chord
    */
-  private getRomanNumeral(chord: string): string {
-    const root = this.getChordRoot(chord);
-    const quality = this.getChordQuality(chord);
+  private getRomanNumeral(inputChord: string): Chord {
+    const root = this.getChordRoot(inputChord);
+    const quality = this.getChordQuality(inputChord);
     const romanNumeral = this.rootToRomanNumeral(root);
     // console.log('root:', root);
     // console.log('quality:', quality);
@@ -110,7 +148,8 @@ export class ChordRomanAnalyzer {
       romanQuality = 'm7';
     }
 
-    return (isMajor ? romanNumeral : romanNumeral.toLowerCase()) + romanQuality;
+    const chord = new Chord(inputChord, (isMajor ? romanNumeral : romanNumeral.toLowerCase()) + romanQuality);
+    return chord;
   }
 
   private rootToRomanNumeral(root: string): string {

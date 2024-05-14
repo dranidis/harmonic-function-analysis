@@ -50,7 +50,7 @@ describe('RomanAnalyzer', () => {
     const romanAnalyzer = new ChordRomanAnalyzer();
     romanAnalyzer.setOptions({secondaryDominants: true});
     expect(romanAnalyzer.analyze(['Gm7', 'C7', 'F#dim7', 'B7', 'Bdim7', 'E7'], 'C'))
-    .toEqual(['iim7/IV', 'V7/IV', 'iio7/iii', 'V7/iii', 'iio7/vi', 'V7/vi']);
+    .toEqual(['iim7/IV', 'V7/IV', 'iio7/iii', 'V7/iii', 'viio7', 'V7/vi']);
   });
 
   test('sharp iv', () => {
