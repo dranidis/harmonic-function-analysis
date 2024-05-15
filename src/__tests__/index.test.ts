@@ -42,15 +42,15 @@ describe('RomanAnalyzer', () => {
 
   test('secondary dominants', () => { 
     const romanAnalyzer = new ChordRomanAnalyzer();
-    romanAnalyzer.setOptions({secondaryDominants: true});
+    romanAnalyzer.setSecondaryDominants(true);
     expect(romanAnalyzer.analyze(['D7', 'G7', 'C7', 'A7', 'B7', 'E7'], 'C')).toEqual(['V7/V', 'V7', 'V7/IV', 'V7/ii', 'V7/iii', 'V7/vi']);
   });
 
   test('secondary ii-V', () => {
     const romanAnalyzer = new ChordRomanAnalyzer();
-    romanAnalyzer.setOptions({secondaryDominants: true});
-    expect(romanAnalyzer.analyze(['Gm7', 'C7', 'F#dim7', 'B7', 'Bdim7', 'E7'], 'C'))
-    .toEqual(['iim7/IV', 'V7/IV', 'iio7/iii', 'V7/iii', 'viio7', 'V7/vi']);
+    romanAnalyzer.setSecondaryDominants(true);
+    expect(romanAnalyzer.analyze(['Gm7', 'C7', 'F#m7b5', 'B7', 'Bm7b5', 'E7'], 'C'))
+    .toEqual(['iim7/IV', 'V7/IV', 'iim7b5/iii', 'V7/iii', 'viim7b5', 'V7/vi']);
   });
 
   test('sharp iv', () => {
@@ -60,13 +60,13 @@ describe('RomanAnalyzer', () => {
 
   test('backdoor dominant', () => {
     const romanAnalyzer = new ChordRomanAnalyzer();
-    romanAnalyzer.setOptions({secondaryDominants: true});
+    romanAnalyzer.setSecondaryDominants(true);
     expect(romanAnalyzer.analyze(['Fm7', 'Bb7'], 'C')).toEqual(['ivm7', 'BD7']);
   });
 
   test('tritone substitutions', () => { 
     const romanAnalyzer = new ChordRomanAnalyzer();
-    romanAnalyzer.setOptions({secondaryDominants: true});
+    romanAnalyzer.setSecondaryDominants(true);
     expect(romanAnalyzer.analyze(['Ab7', 'Db7', 'Gb7', 'Eb7', 'F7'], 'C')).toEqual(['TT7/V', 'TT7', 'TT7/IV', 'TT7/ii', 'TT7/iii']);
   });
 
