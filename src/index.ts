@@ -161,5 +161,5 @@ const iRememberYou =
 // console.log(a.analyze(['Fmaj7'], 'C'));
 // a.setOptions({ secondaryDominants: false, allHarmonicFunctions: true });
 
-// console.log(a.analyze(['Cmaj7', 'C#dim7', 'Dm7', 'D#dim7', 'Em7'], 'C'));
+console.log(a.analyze(['Cmaj7', 'C#dim7', 'Dm7', 'D#dim7', 'Em7'], 'C'));
 // console.log(a.analyze(['Em7', 'Ebdim7', 'Dm7', 'Dbdim7', 'Cmaj7'], 'C'));
