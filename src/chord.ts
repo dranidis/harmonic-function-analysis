@@ -79,7 +79,8 @@ export class Chord {
   }
 
   private analyzeRomanQuality() : void {
-    assert(this.scaleIndex >= 0 && this.scaleIndex < 12, `scaleIndex ${this.scaleIndex} out of range`);
+    assert(this.scaleIndex >= 0 && this.scaleIndex < 12, 
+      `${this.input} ${this.romanNumeral} scaleIndex ${this.scaleIndex} out of range`);
 
     // maj7
     if (this.romanQuality === '') {
@@ -109,10 +110,6 @@ export class Chord {
     }
 
     if (this.romanQuality === 'o7') {
-//       - o7/scalePos+1 (minor)
-// - Eo, scalePos - 2 (minor)
-// - Go, scalePos - 5 (minor)
-// - Bbo, scalePos - 8 (minor)
       this.addMinorHarmonicFunctionHelper('viio7', 1);
       this.addMinorHarmonicFunctionHelper('viio7', -2);
       this.addMinorHarmonicFunctionHelper('viio7', -5);
@@ -120,7 +117,7 @@ export class Chord {
     }
 
     // console.log(this.scaleIndex);
-    console.log(this.harmonicFunctions);
+    console.log(this.input, this.harmonicFunctions);
     console.log(this.weights);
   }
 
@@ -139,8 +136,9 @@ export class Chord {
 
     const quality = this.getChordQuality();
     const rootRomanNumeral = this.rootToRomanNumeral();
-    // console.log('root:', root);
+    // console.log('root:', this.root);
     // console.log('quality:', quality);
+    // console.log('rootRomanNumeral:', rootRomanNumeral);
     const isMajor = quality === 'maj' || quality === 'maj7' || quality === '7' || quality === '';
     const isMinor7th = quality === 'm7';
     const isDiminished = quality === 'dim7';
@@ -186,28 +184,27 @@ export class Chord {
 
   private rootToRomanNumeral(): string {
     let localScaleIndex = this.scale.indexOf(this.root);
+
     let romanNumeral = romanNumerals[localScaleIndex];
     // if index is not found, try flatting the this.root and search again
     if (romanNumeral) {
       this.scaleIndex = allRomanNumerals.indexOf(romanNumeral);
       assert(this.scaleIndex >= 0 && this.scaleIndex < 12, `${this.input}:  scaleIndex ${this.scaleIndex} out of range`);
-
       return romanNumeral;
     }
 
-    const flatRoot = this.flatten(this.root);
+    const flatRoot = this.flatten(this.root)
     localScaleIndex = this.scale.indexOf(flatRoot);
     romanNumeral = romanNumerals[localScaleIndex];
     if (romanNumeral) {
+
       // TODO: does not work for sharps!!!!
       romanNumeral = '#' + romanNumeral;
-      console.log('romanNumeral', romanNumeral);
       this.scaleIndex = allRomanNumerals.indexOf(romanNumeral);
       if (this.scaleIndex < 0) {
         this.scaleIndex = allShaprRomanNumerals.indexOf(romanNumeral);
       }
       assert(this.scaleIndex >= 0 && this.scaleIndex < 12, `${this.input}:  scaleIndex ${this.scaleIndex} out of range`);
-
       return romanNumeral;
     }
 
@@ -218,11 +215,12 @@ export class Chord {
       romanNumeral = 'b' + romanNumeral
       this.scaleIndex = allRomanNumerals.indexOf(romanNumeral);
       assert(this.scaleIndex >= 0 && this.scaleIndex < 12, `${this.input}:  scaleIndex ${this.scaleIndex} out of range`);
-
       return romanNumeral;
     }
 
     this.scaleIndex = localScaleIndex;
+    assert(this.scaleIndex >= 0 && this.scaleIndex < 12, `${this.input}:  scaleIndex ${this.scaleIndex} out of range`);
+
     return this.root;
   }
 

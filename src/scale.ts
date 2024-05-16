@@ -23,7 +23,7 @@ export function getScale(key: string): string[] {
 
   let notesToUse = flattedNotes;
 
-  const isSharpKey = sharpNotes.includes(key);
+  const isSharpKey = ['G', 'D', 'A', 'E', 'B', 'F#', 'C#'].includes(key);
   if (isSharpKey) {
     notesToUse = sharpNotes;
   }
@@ -34,6 +34,8 @@ export function getScale(key: string): string[] {
     currentIndex = (currentIndex + interval) % notesToUse.length;
     scale.push(notesToUse[currentIndex]);
   }
+
+  // console.log('scale:', scale);
 
   return scale;
 }

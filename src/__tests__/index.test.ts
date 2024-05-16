@@ -1,4 +1,5 @@
 import { ChordRomanAnalyzer } from '../';
+import { getScale } from '../scale';
 
 describe('RomanAnalyzer', () => {
   test('RomanAnalyzer exists', () => {
@@ -190,6 +191,15 @@ describe('RomanAnalyzer', () => {
     const romanAnalyzer = new ChordRomanAnalyzer();
     romanAnalyzer.setSecondaryDominants(true);
     expect(romanAnalyzer.analyze(['Cmaj7', 'C#dim7', 'Dm7', 'D#dim7', 'Em7'], 'C')).toEqual(['I', 'viio7/ii', 'iim7', 'viio7/iii', 'iiim7']);
+  });
+
+});
+
+
+describe('getScale', () => {
+
+  test('F major', () => {
+    expect(getScale('F')).toEqual(['F', 'G', 'A', 'Bb', 'C', 'D', 'E', 'F']);
   });
 
 });

@@ -1,5 +1,5 @@
-import { Chord } from "./chord";
-import { getScale } from "./scale";
+import { Chord } from './chord';
+import { getScale } from './scale';
 
 /**
  * RomanAnalyzer class
@@ -35,7 +35,7 @@ export class ChordRomanAnalyzer {
     this.options = { secondaryDominants: false, allHarmonicFunctions: false };
   }
 
-  setOptions(options: { secondaryDominants: boolean; allHarmonicFunctions: boolean}): void {
+  setOptions(options: { secondaryDominants: boolean; allHarmonicFunctions: boolean }): void {
     this.options = options;
   }
 
@@ -54,21 +54,18 @@ export class ChordRomanAnalyzer {
   analyze(chordStrings: string[], key: string): string[] {
     this.key = key;
     this.scale = getScale(this.key);
-    const analysis = chordStrings.map((chortStr) =>
-      new Chord(chortStr, this.scale));
+    const analysis = chordStrings.map((chortStr) => new Chord(chortStr, this.scale));
 
-    if (this.options.secondaryDominants) {
-      if (this.options.allHarmonicFunctions) {
-        return analysis.map(
-          (chord) => 
-            chord.input + " : " + chord.getHarmonicFunction()
-            // '[' + chord.getHarmonicFunctionsSorted().join() + ']'
-        );
+    return analysis.map((chord) => {
+      if (this.options.secondaryDominants) {
+        if (this.options.allHarmonicFunctions) {
+          return chord.input + ' : ' + chord.getHarmonicFunction();
+          // return chord.input + '[' + chord.getHarmonicFunctionsSorted().join() + ']'
+        }
+        return chord.getHarmonicFunction();
       }
-      return analysis.map((chord) => chord.getHarmonicFunction());
-    }
-
-    return analysis.map((chord) => chord.romanNumeral);
+      return chord.romanNumeral;
+    });
   }
 }
 
@@ -110,7 +107,7 @@ const allTheThingsYouAre = [
   'Abmaj7',
   'Dbmaj7',
   'G7',
-  'Cmaj7', 
+  'Cmaj7',
 
   'Cm7',
   'Fm7',
@@ -140,9 +137,23 @@ const allTheThingsYouAre = [
   'Eb7',
   'Abmaj7',
   'Gm7b5',
-  'C7'
+  'C7',
 ];
 
+const iRememberYou = 
+  ('Fmaj7 Bm7b5 E7 Fmaj7 Cm7 F7 '
+  + 'Bbmaj7 Bbm7 Eb7 Fmaj7 Gm7 C7 '
+  + 'Fmaj7 Bm7 E7 Fmaj7 Cm7 F7 '
+  + 'Bbmaj7 Bbm7 Eb7 Fmaj7 Cm7 F7 '
+  + 'Bbmaj7 Em7 A7 Dmaj7 Em7 A7 '
+  + 'Dmaj7 Dm7 G7 Cmaj7 Gm7 C7 '
+  + 'Fmaj7 Bm7 E7 Fmaj7 Am7b5 D7 '
+  + 'Gm7 Bbm7 Eb7 Am7 D7 ' 
+  + 'Gm7 C7 Fmaj7 D7 Gm7 C7').split(' ');
+
+  // console.log(iRememberYou);
+
+console.log(a.analyze(iRememberYou, 'F'));
 // console.log(a.analyze(youStepped, 'C'));
 // console.log(a.analyze(allTheThingsYouAre, 'Ab'));
 // console.log(a.analyze(['Bm7b5'], 'C'));
@@ -150,5 +161,5 @@ const allTheThingsYouAre = [
 // console.log(a.analyze(['Fmaj7'], 'C'));
 // a.setOptions({ secondaryDominants: false, allHarmonicFunctions: true });
 
-console.log(a.analyze(['Cmaj7', 'C#dim7', 'Dm7', 'D#dim7', 'Em7'], 'C'));
-console.log(a.analyze(['Em7', 'Ebdim7',  'Dm7', 'Dbdim7','Cmaj7'], 'C'));
+// console.log(a.analyze(['Cmaj7', 'C#dim7', 'Dm7', 'D#dim7', 'Em7'], 'C'));
+// console.log(a.analyze(['Em7', 'Ebdim7', 'Dm7', 'Dbdim7', 'Cmaj7'], 'C'));
