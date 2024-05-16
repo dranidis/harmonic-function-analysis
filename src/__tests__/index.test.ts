@@ -44,13 +44,13 @@ describe('RomanAnalyzer', () => {
   test('secondary dominants', () => {
     const romanAnalyzer = new ChordRomanAnalyzer();
     romanAnalyzer.setSecondaryDominants(true);
-    expect(romanAnalyzer.analyze(['D7', 'G7', 'C7', 'A7', 'B7', 'E7'], 'C')).toEqual([
+    expect(romanAnalyzer.analyze(['B7', 'E7', 'A7', 'D7', 'G7', 'C7'], 'C')).toEqual([
+      'V7/iii',
+      'V7/vi',
+      'V7/ii',
       'V7/V',
       'V7',
       'V7/IV',
-      'V7/ii',
-      'V7/iii',
-      'V7/vi',
     ]);
   });
 
@@ -78,12 +78,6 @@ describe('RomanAnalyzer', () => {
     expect(romanAnalyzer.analyze(['Fm7', 'Bb7'], 'C')).toEqual(['ivm7', 'BD7']);
   });
 
-  test('tritone substitutions', () => {
-    const romanAnalyzer = new ChordRomanAnalyzer();
-    romanAnalyzer.setSecondaryDominants(true);
-    expect(romanAnalyzer.analyze(['Ab7', 'Db7', 'Gb7'], 'C')).toEqual(['TT7/V', 'TT7', 'TT7/IV']);
-  });
-
   test('major 7 chords', () => {
     const romanAnalyzer = new ChordRomanAnalyzer();
     romanAnalyzer.setSecondaryDominants(true);
@@ -100,18 +94,6 @@ describe('RomanAnalyzer', () => {
     const romanAnalyzer = new ChordRomanAnalyzer();
     romanAnalyzer.setSecondaryDominants(true);
     expect(romanAnalyzer.analyze(['D7'], 'C')).toEqual(['V7/V']);
-  });
-
-  test('D7 in Ab', () => {
-    const romanAnalyzer = new ChordRomanAnalyzer();
-    romanAnalyzer.setSecondaryDominants(true);
-    expect(romanAnalyzer.analyze(['D7'], 'Ab')).toEqual(['TT7/IV']);
-  });
-
-  test('Am7 in Ab', () => {
-    const romanAnalyzer = new ChordRomanAnalyzer();
-    romanAnalyzer.setSecondaryDominants(true);
-    expect(romanAnalyzer.analyze(['Am7'], 'Ab')).toEqual(['TTm7/IV']);
   });
 
   test('Ebmaj7 in Ab', () => {
@@ -146,7 +128,7 @@ describe('RomanAnalyzer', () => {
   });
 
   // TODO: add voting for local key (modulation)
-  test.skip('ii-V-I-IV / V in C', () => {
+  test('ii-V-I-IV / V in C', () => {
     const romanAnalyzer = new ChordRomanAnalyzer();
     romanAnalyzer.setSecondaryDominants(true);
     expect(romanAnalyzer.analyze(['Am7', 'D7', 'Gmaj7', 'Cmaj7'], 'C')).toEqual(['iim7/V', 'V7/V', 'I/V', 'IV/V']);
@@ -154,7 +136,7 @@ describe('RomanAnalyzer', () => {
 
   // TODO: add voting for local key (modulation)
 
-  test.skip('IV-V-I / bVI in C', () => {
+  test('IV-V-I / bVI in C', () => {
     const romanAnalyzer = new ChordRomanAnalyzer();
     romanAnalyzer.setSecondaryDominants(true);
     expect(romanAnalyzer.analyze(['Dbmaj7', 'Eb7', 'Abmaj7'], 'C')).toEqual(['IV/bVI', 'V7/bVI', 'I/bVI']);
@@ -177,14 +159,14 @@ describe('RomanAnalyzer', () => {
   test.skip('F#m7b5-B7-Emaj7 in Ab', () => {
     const romanAnalyzer = new ChordRomanAnalyzer();
     romanAnalyzer.setSecondaryDominants(true);
-    expect(romanAnalyzer.analyze(['F#m7b5', 'B7', 'Emaj7'], 'Ab')).toEqual(['iim7b5/bVI', 'V7/bVI', 'I/bVI']);
+    expect(romanAnalyzer.analyze(['F#m7b5', 'B7', 'Emaj7'], 'Ab')).toEqual(['iim7b5/bvi', 'V7/bvi', 'I/bVI']);
   });
 
   // voting will solve this as well
-  test.skip('Gm7b5-C7 in Ab', () => {
+  test('Gm7b5-C7 in Ab', () => {
     const romanAnalyzer = new ChordRomanAnalyzer();
     romanAnalyzer.setSecondaryDominants(true);
-    expect(romanAnalyzer.analyze(['Gm7b5', 'C7'], 'Ab')).toEqual(['ivm7b5/vi', 'V7/vi']);
+    expect(romanAnalyzer.analyze(['Gm7b5', 'C7'], 'Ab')).toEqual(['iim7b5/vi', 'V7/vi']);
   });
 
   test('diminished chords', () => { 

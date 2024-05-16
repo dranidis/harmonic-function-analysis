@@ -54,9 +54,14 @@ export class ChordRomanAnalyzer {
   analyze(chordStrings: string[], key: string): string[] {
     this.key = key;
     this.scale = getScale(this.key);
-    const analysis = chordStrings.map((chortStr) => new Chord(chortStr, this.scale));
+    const chords = chordStrings.map((chortStr) => new Chord(chortStr, this.scale));
 
-    return analysis.map((chord) => {
+    this.updateWeights(chords);
+    // this.updateWeights(chords);
+    // this.updateWeights(chords);
+    
+
+    return chords.map((chord) => {
       if (this.options.secondaryDominants) {
         if (this.options.allHarmonicFunctions) {
           return chord.input + ' : ' + chord.getHarmonicFunction();
@@ -66,6 +71,14 @@ export class ChordRomanAnalyzer {
       }
       return chord.romanNumeral;
     });
+  }
+
+  private updateWeights(chords: Chord[]): void {
+    for (let i = 0; i < chords.length; i++) {
+      const previous = i === 0 ? null : chords[i - 1];
+      const next = i === chords.length - 1 ? null : chords[i + 1];
+      chords[i].updateWeights(previous, next);
+    }
   }
 }
 
@@ -91,7 +104,7 @@ const youStepped = [
   'Eb7',
   'Gb7',
   'F7',
-  'Ddim7',
+  'Dm7b5',
   'G7',
   'Em7',
   'A7',
@@ -140,18 +153,19 @@ const allTheThingsYouAre = [
   'C7',
 ];
 
-const iRememberYou = 
-  ('Fmaj7 Bm7b5 E7 Fmaj7 Cm7 F7 '
-  + 'Bbmaj7 Bbm7 Eb7 Fmaj7 Gm7 C7 '
-  + 'Fmaj7 Bm7 E7 Fmaj7 Cm7 F7 '
-  + 'Bbmaj7 Bbm7 Eb7 Fmaj7 Cm7 F7 '
-  + 'Bbmaj7 Em7 A7 Dmaj7 Em7 A7 '
-  + 'Dmaj7 Dm7 G7 Cmaj7 Gm7 C7 '
-  + 'Fmaj7 Bm7 E7 Fmaj7 Am7b5 D7 '
-  + 'Gm7 Bbm7 Eb7 Am7 D7 ' 
-  + 'Gm7 C7 Fmaj7 D7 Gm7 C7').split(' ');
+const iRememberYou = (
+  'Fmaj7 Bm7b5 E7 Fmaj7 Cm7 F7 ' +
+  'Bbmaj7 Bbm7 Eb7 Fmaj7 Gm7 C7 ' +
+  'Fmaj7 Bm7 E7 Fmaj7 Cm7 F7 ' +
+  'Bbmaj7 Bbm7 Eb7 Fmaj7 Cm7 F7 ' +
+  'Bbmaj7 Em7 A7 Dmaj7 Em7 A7 ' +
+  'Dmaj7 Dm7 G7 Cmaj7 Gm7 C7 ' +
+  'Fmaj7 Bm7 E7 Fmaj7 Am7b5 D7 ' +
+  'Gm7 Bbm7 Eb7 Am7 D7 ' +
+  'Gm7 C7 Fmaj7 D7 Gm7 C7'
+).split(' ');
 
-  // console.log(iRememberYou);
+// console.log(iRememberYou);
 
 // console.log(a.analyze(iRememberYou, 'F'));
 // console.log(a.analyze(youStepped, 'C'));
@@ -161,5 +175,5 @@ const iRememberYou =
 // console.log(a.analyze(['Fmaj7'], 'C'));
 // a.setOptions({ secondaryDominants: false, allHarmonicFunctions: true });
 
-console.log(a.analyze(['Cmaj7', 'C#dim7', 'Dm7', 'D#dim7', 'Em7'], 'C'));
+// console.log(a.analyze(['Cmaj7', 'C#dim7', 'Dm7', 'D#dim7', 'Em7'], 'C'));
 // console.log(a.analyze(['Em7', 'Ebdim7', 'Dm7', 'Dbdim7', 'Cmaj7'], 'C'));

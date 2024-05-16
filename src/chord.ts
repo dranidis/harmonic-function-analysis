@@ -1,20 +1,20 @@
-import { HarmonicFunction } from "./harmonicFunction";
+import { HarmonicFunction } from './harmonicFunction';
 
 const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'];
 const allRomanNumerals = ['I', 'bII', 'II', 'bIII', 'III', 'IV', 'bV', 'V', 'bVI', 'VI', 'bVII', 'VII'];
 const allSharpRomanNumerals = ['I', '#I', 'II', '#II', 'III', 'IV', '#IV', 'V', '#V', 'VI', '#VI', 'VII'];
-const keyCircle = ['I', 'IV', 'V', 'bVII', 'II', 'bIII', 'VI', 'bVI', 'III', 'bII', 'VII', 'bV']; 
-const minorKeyCircle = ['vi', 'ii', 'iii', 'v', 'vii', 'i', 'bv', 'iv', 'bii', 'bvii', 'bvi', 'biii']; 
+const keyCircle = ['I', 'IV', 'V', 'bVII', 'II', 'bIII', 'VI', 'bVI', 'III', 'bII', 'VII', 'bV'];
+const minorKeyCircle = ['vi', 'ii', 'iii', 'v', 'vii', 'i', 'bv', 'iv', 'bii', 'bvii', 'bvi', 'biii'];
 
 const KEY_WEIGHT_DIVIDER = 20;
-const MINOR_KEY_WEIGHT_SUBTRACT = 0.00;
+const MINOR_KEY_WEIGHT_SUBTRACT = 0.0;
 
 export enum Quality {
   maj7 = 'maj7',
   dom7 = '7',
   m7 = 'm7',
   m7b5 = 'm7b5',
-  o7 =  'o7',
+  o7 = 'o7',
 }
 
 export function qualityToString(quality: Quality): string {
@@ -34,11 +34,13 @@ export function qualityToString(quality: Quality): string {
 
 function assert(condition: any, msg?: string): asserts condition {
   if (!condition) {
-      throw new Error(msg)
+    throw new Error(msg);
   }
 }
 
 export class Chord {
+  // console.log('index', index);
+
   input: string;
   romanNumeral = '';
   harmonicFunctions: HarmonicFunction[] = [];
@@ -54,8 +56,49 @@ export class Chord {
     this.analyzeRomanQuality();
   }
 
+  getHarmonicFunction(): string {
+    if (this.harmonicFunctions.length === 0) {
+      return '?';
+    }
+    // return the harmonic function with the highest weight
+    // const maxWeight = Math.max(...this.weights);
+    // const maxIndex = this.weights.indexOf(maxWeight);
+    // return this.harmonicFunctions[maxIndex];
+    return this.getHarmonicFunctionsSorted()[0].toString();
+  }
+
+  getHarmonicFunctions(): string[] {
+    return this.harmonicFunctions.map((hf) => hf.toString());
+  }
+
+  updateWeights(previous: Chord | null, next: Chord | null): void {
+    console.log("BEF", this.input, this.harmonicFunctions);
+    if (previous) {
+      this.updateWeightsHelper(previous);
+    }
+    if (next) {
+      this.updateWeightsHelper(next);
+    }
+    console.log("AFT", this.input, this.harmonicFunctions);
+  }
+
+  /**
+   * for all the keys in the harmonic functions of the current chord
+   * if the neighbor chord has the same key, increase the weight by 0.5 of the neighbor weight
+   * @param neighborChord
+   */
+  private updateWeightsHelper(neighborChord: Chord) {
+    for (const neighborHarmonicFunction of neighborChord.harmonicFunctions) {
+      for (const harmonicFunction of this.harmonicFunctions) {
+        if (neighborHarmonicFunction.key === harmonicFunction.key) {
+          harmonicFunction.weight += 0.5 * neighborHarmonicFunction.weight;
+        }
+      }
+    }
+  }
+
   // return the harmonic functions sorted by their weight
-  private getHarmonicFunctionsSorted(): HarmonicFunction[] {
+  getHarmonicFunctionsSorted(): HarmonicFunction[] {
     const functions = this.harmonicFunctions;
     const sortedFunctions = functions.sort((a, b) => {
       return b.weight - a.weight;
@@ -63,7 +106,7 @@ export class Chord {
     return sortedFunctions;
   }
 
-  private newkey(scaleDistance: number) : string {
+  private newkey(scaleDistance: number): string {
     let index = (this.scaleIndex + scaleDistance) % 12;
     while (index < 0) {
       index += 12;
@@ -76,7 +119,7 @@ export class Chord {
     return key === 'I' ? '' : '/' + key;
   }
 
-  private keyDistance(key:string): number {
+  private keyDistance(key: string): number {
     // console.log('keyDistance: key', key, 'keyCircle.indexOf(key)', keyCircle.indexOf(key));
     return 1 - keyCircle.indexOf(key) / KEY_WEIGHT_DIVIDER;
   }
@@ -85,21 +128,23 @@ export class Chord {
     const key = this.newkey(scaleDistance);
     const keyDist = this.keyDistance(key);
     // console.log('key', key, 'keyDist', keyDist);
-    this.addHarmonicFunction(key, posStr, quality, keyDist);    
+    this.addHarmonicFunction(key, posStr, quality, keyDist);
   }
 
   private addMinorHarmonicFunctionHelper(posStr: string, quality: Quality, scaleDistance: number) {
     const key = this.newkey(scaleDistance);
     const minorKey = key.toLowerCase();
-    assert(minorKeyCircle.indexOf(minorKey) >= 0 , `minorKey ${minorKey} not found`)
+    assert(minorKeyCircle.indexOf(minorKey) >= 0, `minorKey ${minorKey} not found`);
     const minorKeyDist = 1 - minorKeyCircle.indexOf(minorKey) / KEY_WEIGHT_DIVIDER - MINOR_KEY_WEIGHT_SUBTRACT;
     // console.log('min key', minorKey, 'minorKeyDist', minorKeyDist);
     this.addHarmonicFunction(minorKey, posStr, quality, minorKeyDist);
   }
 
-  private analyzeRomanQuality() : void {
-    assert(this.scaleIndex >= 0 && this.scaleIndex < 12, 
-      `${this.input} ${this.romanNumeral} scaleIndex ${this.scaleIndex} out of range`);
+  private analyzeRomanQuality(): void {
+    assert(
+      this.scaleIndex >= 0 && this.scaleIndex < 12,
+      `${this.input} ${this.romanNumeral} scaleIndex ${this.scaleIndex} out of range`,
+    );
 
     // maj7
     if (this.quality === Quality.maj7) {
@@ -111,7 +156,7 @@ export class Chord {
       this.addHarmonicFunctionHelper('V', Quality.dom7, -7);
       this.addMinorHarmonicFunctionHelper('V', Quality.dom7, -7);
       this.addHarmonicFunctionHelper('BD', Quality.dom7, +2);
-      this.addHarmonicFunctionHelper('TT', Quality.dom7, -1);
+      // this.addHarmonicFunctionHelper('TT', Quality.dom7, -1);
       this.addMinorHarmonicFunctionHelper('TT', Quality.dom7, -1);
     }
 
@@ -120,23 +165,23 @@ export class Chord {
       this.addHarmonicFunctionHelper('iii', Quality.m7, -4);
       this.addHarmonicFunctionHelper('vi', Quality.m7, -9);
       this.addHarmonicFunctionHelper('iv', Quality.m7, -5);
-      this.addHarmonicFunctionHelper('TT', Quality.m7, -8);
+      // this.addHarmonicFunctionHelper('TT', Quality.m7, -8);
     }
 
     if (this.quality === Quality.m7b5) {
       this.addMinorHarmonicFunctionHelper('ii', Quality.m7b5, -2); // minor
-      this.addHarmonicFunctionHelper('vii', Quality.m7b5, 1);
+      // this.addHarmonicFunctionHelper('vii', Quality.m7b5, 1);
     }
 
     if (this.quality === Quality.o7) {
       this.addMinorHarmonicFunctionHelper('vii', Quality.o7, 1);
       this.addMinorHarmonicFunctionHelper('vii', Quality.o7, -2);
       this.addMinorHarmonicFunctionHelper('vii', Quality.o7, -5);
-      this.addMinorHarmonicFunctionHelper('vii', Quality.o7, -8);  
+      this.addMinorHarmonicFunctionHelper('vii', Quality.o7, -8);
     }
 
     // console.log(this.scaleIndex);
-    console.log(this.input, this.harmonicFunctions);
+    // console.log(this.input, this.harmonicFunctions);
   }
 
   /**
@@ -208,22 +253,27 @@ export class Chord {
     // if index is not found, try flatting the this.root and search again
     if (romanNumeral) {
       this.scaleIndex = allRomanNumerals.indexOf(romanNumeral);
-      assert(this.scaleIndex >= 0 && this.scaleIndex < 12, `${this.input}:  scaleIndex ${this.scaleIndex} out of range`);
+      assert(
+        this.scaleIndex >= 0 && this.scaleIndex < 12,
+        `${this.input}:  scaleIndex ${this.scaleIndex} out of range`,
+      );
       return romanNumeral;
     }
 
-    const flatRoot = this.flatten(this.root)
+    const flatRoot = this.flatten(this.root);
     localScaleIndex = this.scale.indexOf(flatRoot);
     romanNumeral = romanNumerals[localScaleIndex];
     if (romanNumeral) {
-
       // TODO: does not work for sharps!!!!
       romanNumeral = '#' + romanNumeral;
       this.scaleIndex = allRomanNumerals.indexOf(romanNumeral);
       if (this.scaleIndex < 0) {
         this.scaleIndex = allSharpRomanNumerals.indexOf(romanNumeral);
       }
-      assert(this.scaleIndex >= 0 && this.scaleIndex < 12, `${this.input}:  scaleIndex ${this.scaleIndex} out of range`);
+      assert(
+        this.scaleIndex >= 0 && this.scaleIndex < 12,
+        `${this.input}:  scaleIndex ${this.scaleIndex} out of range`,
+      );
       return romanNumeral;
     }
 
@@ -231,9 +281,12 @@ export class Chord {
     localScaleIndex = this.scale.indexOf(sharpRoot);
     romanNumeral = romanNumerals[localScaleIndex];
     if (romanNumeral) {
-      romanNumeral = 'b' + romanNumeral
+      romanNumeral = 'b' + romanNumeral;
       this.scaleIndex = allRomanNumerals.indexOf(romanNumeral);
-      assert(this.scaleIndex >= 0 && this.scaleIndex < 12, `${this.input}:  scaleIndex ${this.scaleIndex} out of range`);
+      assert(
+        this.scaleIndex >= 0 && this.scaleIndex < 12,
+        `${this.input}:  scaleIndex ${this.scaleIndex} out of range`,
+      );
       return romanNumeral;
     }
 
@@ -258,22 +311,4 @@ export class Chord {
   private addHarmonicFunction(key: string, posStr: string, quality: Quality, weight = 1): void {
     this.harmonicFunctions.push(new HarmonicFunction(key, posStr, quality, weight));
   }
-
-  getHarmonicFunction(): string {
-    if (this.harmonicFunctions.length === 0) {
-      return '?';
-    }
-    // return the harmonic function with the highest weight
-    // const maxWeight = Math.max(...this.weights);
-    // const maxIndex = this.weights.indexOf(maxWeight);
-    // return this.harmonicFunctions[maxIndex];
-    return this.getHarmonicFunctionsSorted()[0].toString();
-  }
-
-  private getHarmonicFunctions(): string[] {
-    return this.harmonicFunctions.map((hf) => hf.toString());
-  }
-
 }
-
-
