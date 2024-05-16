@@ -153,7 +153,7 @@ const iRememberYou =
 
   // console.log(iRememberYou);
 
-console.log(a.analyze(iRememberYou, 'F'));
+// console.log(a.analyze(iRememberYou, 'F'));
 // console.log(a.analyze(youStepped, 'C'));
 // console.log(a.analyze(allTheThingsYouAre, 'Ab'));
 // console.log(a.analyze(['Bm7b5'], 'C'));

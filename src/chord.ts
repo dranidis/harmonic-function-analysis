@@ -7,6 +7,29 @@ const minorkeyCircle = ['vi', 'ii', 'iii', 'v', 'vii', 'i', 'bv', 'iv', 'bii', '
 const KEY_WEIGHT_DIVIDER = 20;
 const MINOR_KEY_WEIGHT_SUBTRACT = 0.00;
 
+enum Quality {
+  maj7,
+  dom7,
+  m7,
+  m7b5,
+  o7,
+}
+
+function qualityToString(quality: Quality): string {
+  switch (quality) {
+    case Quality.maj7:
+      return '';
+    case Quality.dom7:
+      return '7';
+    case Quality.m7:
+      return 'm7';
+    case Quality.m7b5:
+      return 'm7b5';
+    case Quality.o7:
+      return 'o7';
+  }
+}
+
 function assert(condition: any, msg?: string): asserts condition {
   if (!condition) {
       throw new Error(msg)
@@ -20,7 +43,7 @@ export class Chord {
   weights: number[];
   root = '';
   scale: string[];
-  romanQuality = '';
+  quality: Quality = Quality.maj7;
   scaleIndex = 0;
 
   constructor(input: string, scale: string[]) {
@@ -83,12 +106,12 @@ export class Chord {
       `${this.input} ${this.romanNumeral} scaleIndex ${this.scaleIndex} out of range`);
 
     // maj7
-    if (this.romanQuality === '') {
+    if (this.quality === Quality.maj7) {
       this.addHarmonicFunctionHelper('IV', 7);
       this.addHarmonicFunctionHelper('I', 0);
     }
 
-    if (this.romanQuality === '7') {
+    if (this.quality === Quality.dom7) {
       this.addHarmonicFunctionHelper('V7', -7);
       this.addMinorHarmonicFunctionHelper('V7', -7);
       this.addHarmonicFunctionHelper('BD7', +2);
@@ -96,7 +119,7 @@ export class Chord {
       this.addMinorHarmonicFunctionHelper('TT7', -1);
     }
 
-    if (this.romanQuality === 'm7') {
+    if (this.quality === Quality.m7) {
       this.addHarmonicFunctionHelper('iim7', -2);
       this.addHarmonicFunctionHelper('iiim7', -4);
       this.addHarmonicFunctionHelper('vim7', -9);
@@ -104,12 +127,12 @@ export class Chord {
       this.addHarmonicFunctionHelper('TTm7', -8);
     }
 
-    if (this.romanQuality === 'm7b5') {
+    if (this.quality === Quality.m7b5) {
       this.addMinorHarmonicFunctionHelper('iim7b5', -2); // minor
       this.addHarmonicFunctionHelper('viim7b5', 1);
     }
 
-    if (this.romanQuality === 'o7') {
+    if (this.quality === Quality.o7) {
       this.addMinorHarmonicFunctionHelper('viio7', 1);
       this.addMinorHarmonicFunctionHelper('viio7', -2);
       this.addMinorHarmonicFunctionHelper('viio7', -5);
@@ -143,18 +166,19 @@ export class Chord {
     const isMinor7th = quality === 'm7';
     const isDiminished = quality === 'dim7';
     const isHalfDiminished = quality === 'm7b5';
-    this.romanQuality = quality === '7' ? '7' : '';
+
+    this.quality = quality === '7' ? Quality.dom7 : Quality.maj7;
     if (isDiminished) {
-      this.romanQuality = 'o7';
+      this.quality = Quality.o7;
     }
     if (isMinor7th) {
-      this.romanQuality = 'm7';
+      this.quality = Quality.m7;
     }
     if (isHalfDiminished) {
-      this.romanQuality = 'm7b5';
+      this.quality = Quality.m7b5;
     }
 
-    this.romanNumeral = (isMajor ? rootRomanNumeral : rootRomanNumeral.toLowerCase()) + this.romanQuality;
+    this.romanNumeral = (isMajor ? rootRomanNumeral : rootRomanNumeral.toLowerCase()) + qualityToString(this.quality);
   }
 
   /**
