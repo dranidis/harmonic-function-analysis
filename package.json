@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.js",
   "scripts": {
+    "start": "tsx watch src/index.ts",
     "test": "jest",
     "prepublishOnly": "eslint . --ext .ts",
     "prepare": "npm run build",
@@ -58,5 +59,8 @@
       "json",
       "node"
     ]
+  },
+  "dependencies": {
+    "tsx": "^4.10.3"
   }
 }
