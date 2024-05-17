@@ -6,8 +6,15 @@ const allSharpRomanNumerals = ['I', '#I', 'II', '#II', 'III', 'IV', '#IV', 'V', 
 const keyCircle = ['I', 'IV', 'V', 'bVII', 'II', 'bIII', 'VI', 'bVI', 'III', 'bII', 'VII', 'bV'];
 const minorKeyCircle = ['vi', 'ii', 'iii', 'v', 'vii', 'i', 'bv', 'iv', 'bii', 'bvii', 'bvi', 'biii'];
 
-const KEY_WEIGHT_DIVIDER = 20;
+const KEY_WEIGHT_DIVIDER = 10//10;
 const MINOR_KEY_WEIGHT_SUBTRACT = 0.0;
+const FROM_NEXT_NEIGHBOR_UPDATE_FACTOR = 0.8;
+const FROM_PREV_NEIGHBOR_UPDATE_FACTOR = 0.3;
+const II_V_UPDATE_FACTOR = 2;
+const V_I_UPDATE_FACTOR = 2;
+
+const ENABLE_SEC_DOM = false;
+const ENABLE_TT = true;
 
 export enum Quality {
   maj7 = 'maj7',
@@ -39,6 +46,14 @@ function assert(condition: any, msg?: string): asserts condition {
 }
 
 export class Chord {
+  // return the two highest harmonic functions
+  getHighestHarmonicFunctions(): string[] {
+    const sortedFunctions = this.getHarmonicFunctionsSorted();
+    if (sortedFunctions.length < 2) {
+      return [sortedFunctions[0].toString()];
+    }
+    return [sortedFunctions[0].toString(), sortedFunctions[1].toString()];
+  }
   // console.log('index', index);
 
   input: string;
@@ -64,6 +79,8 @@ export class Chord {
     // const maxWeight = Math.max(...this.weights);
     // const maxIndex = this.weights.indexOf(maxWeight);
     // return this.harmonicFunctions[maxIndex];
+    console.log(this.input)
+    console.log(this.harmonicFunctions)
     return this.getHarmonicFunctionsSorted()[0].toString();
   }
 
@@ -72,14 +89,47 @@ export class Chord {
   }
 
   updateWeights(previous: Chord | null, next: Chord | null): void {
-    console.log("BEF", this.input, this.harmonicFunctions);
+    // console.log("BEF", this.input, this.harmonicFunctions);
     if (previous) {
-      this.updateWeightsHelper(previous);
+      this.updateWeightsHelper(previous, FROM_PREV_NEIGHBOR_UPDATE_FACTOR);
+      this.updateiiV(previous);
     }
     if (next) {
-      this.updateWeightsHelper(next);
+      this.updateWeightsHelper(next, FROM_NEXT_NEIGHBOR_UPDATE_FACTOR);
     }
-    console.log("AFT", this.input, this.harmonicFunctions);
+
+    // if previous is a ii and current is a V in some same key
+    // increase the weight of the previous ii and the current V by 0.5
+
+    // console.log("AFT", this.input, this.harmonicFunctions);
+  }
+
+  updateiiV(previous: Chord) : void {
+    for (const prevHarmonicFunction of previous.harmonicFunctions) {
+      for (const harmonicFunction of this.harmonicFunctions) {
+        if (prevHarmonicFunction.key === harmonicFunction.key) {
+          if (prevHarmonicFunction.position === 'ii' && harmonicFunction.position === 'V') {
+            harmonicFunction.weight *= II_V_UPDATE_FACTOR;
+            prevHarmonicFunction.weight *= II_V_UPDATE_FACTOR;
+          }
+
+          if (prevHarmonicFunction.position === 'tt' && harmonicFunction.position === 'TT') {
+            harmonicFunction.weight *= II_V_UPDATE_FACTOR;
+            prevHarmonicFunction.weight *= II_V_UPDATE_FACTOR;
+          }
+
+          if (prevHarmonicFunction.position === 'iv' && harmonicFunction.position === 'BD') {
+            harmonicFunction.weight *= II_V_UPDATE_FACTOR;
+            prevHarmonicFunction.weight *= II_V_UPDATE_FACTOR;
+          }
+
+          if (prevHarmonicFunction.position === 'V' && harmonicFunction.position === 'I') {
+            harmonicFunction.weight *= V_I_UPDATE_FACTOR;
+            prevHarmonicFunction.weight *= V_I_UPDATE_FACTOR;
+          }
+        }
+      }
+    }
   }
 
   /**
@@ -87,11 +137,11 @@ export class Chord {
    * if the neighbor chord has the same key, increase the weight by 0.5 of the neighbor weight
    * @param neighborChord
    */
-  private updateWeightsHelper(neighborChord: Chord) {
+  private updateWeightsHelper(neighborChord: Chord, factor: number) {
     for (const neighborHarmonicFunction of neighborChord.harmonicFunctions) {
       for (const harmonicFunction of this.harmonicFunctions) {
         if (neighborHarmonicFunction.key === harmonicFunction.key) {
-          harmonicFunction.weight += 0.5 * neighborHarmonicFunction.weight;
+          harmonicFunction.weight += factor * neighborHarmonicFunction.weight;
         }
       }
     }
@@ -115,10 +165,6 @@ export class Chord {
     return allRomanNumerals[index];
   }
 
-  private keyString(key: string): string {
-    return key === 'I' ? '' : '/' + key;
-  }
-
   private keyDistance(key: string): number {
     // console.log('keyDistance: key', key, 'keyCircle.indexOf(key)', keyCircle.indexOf(key));
     return 1 - keyCircle.indexOf(key) / KEY_WEIGHT_DIVIDER;
@@ -140,6 +186,10 @@ export class Chord {
     this.addHarmonicFunction(minorKey, posStr, quality, minorKeyDist);
   }
 
+  private addHarmonicFunction(key: string, posStr: string, quality: Quality, weight = 1): void {
+    this.harmonicFunctions.push(new HarmonicFunction(key, posStr, quality, weight));
+  }
+
   private analyzeRomanQuality(): void {
     assert(
       this.scaleIndex >= 0 && this.scaleIndex < 12,
@@ -156,8 +206,20 @@ export class Chord {
       this.addHarmonicFunctionHelper('V', Quality.dom7, -7);
       this.addMinorHarmonicFunctionHelper('V', Quality.dom7, -7);
       this.addHarmonicFunctionHelper('BD', Quality.dom7, +2);
-      // this.addHarmonicFunctionHelper('TT', Quality.dom7, -1);
-      this.addMinorHarmonicFunctionHelper('TT', Quality.dom7, -1);
+      if (ENABLE_TT) {
+        this.addHarmonicFunctionHelper('TT', Quality.dom7, -1);
+        this.addMinorHarmonicFunctionHelper('TT', Quality.dom7, -1);
+      }
+
+      // secondary dominants
+      // tests break
+      if (ENABLE_SEC_DOM) {
+        this.addHarmonicFunctionHelper('SV', Quality.dom7, -2);
+        this.addHarmonicFunctionHelper('Sii', Quality.dom7, +3);
+        this.addHarmonicFunctionHelper('Svi', Quality.dom7, -4);
+        this.addHarmonicFunctionHelper('Siii', Quality.dom7, +1);
+        this.addHarmonicFunctionHelper('SIV', Quality.dom7, 0);
+      }
     }
 
     if (this.quality === Quality.m7) {
@@ -165,7 +227,11 @@ export class Chord {
       this.addHarmonicFunctionHelper('iii', Quality.m7, -4);
       this.addHarmonicFunctionHelper('vi', Quality.m7, -9);
       this.addHarmonicFunctionHelper('iv', Quality.m7, -5);
-      // this.addHarmonicFunctionHelper('TT', Quality.m7, -8);
+      if (ENABLE_TT) {
+       this.addHarmonicFunctionHelper('tt', Quality.m7, -8);
+      }
+      // this.addMinorHarmonicFunctionHelper('i', Quality.m7, 0); // minor
+
     }
 
     if (this.quality === Quality.m7b5) {
@@ -306,9 +372,5 @@ export class Chord {
 
   private sharpen(note: string): string {
     return note.includes('b') ? note.slice(0, 1) : note + '#';
-  }
-
-  private addHarmonicFunction(key: string, posStr: string, quality: Quality, weight = 1): void {
-    this.harmonicFunctions.push(new HarmonicFunction(key, posStr, quality, weight));
   }
 }
