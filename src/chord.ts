@@ -1,12 +1,12 @@
+import { Quality, getChordQuality, getChordRoot, qualityToString } from './chordName';
 import { HarmonicFunction } from './harmonicFunction';
+import { rootToRomanNumeral } from './note';
+import { newKey, scaleIndex } from './roman';
 
-const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'];
-const allRomanNumerals = ['I', 'bII', 'II', 'bIII', 'III', 'IV', 'bV', 'V', 'bVI', 'VI', 'bVII', 'VII'];
-const allSharpRomanNumerals = ['I', '#I', 'II', '#II', 'III', 'IV', '#IV', 'V', '#V', 'VI', '#VI', 'VII'];
 const keyCircle = ['I', 'IV', 'V', 'bVII', 'II', 'bIII', 'VI', 'bVI', 'III', 'bII', 'VII', 'bV'];
 const minorKeyCircle = ['vi', 'ii', 'iii', 'v', 'vii', 'i', 'bv', 'iv', 'bii', 'bvii', 'bvi', 'biii'];
 
-const KEY_WEIGHT_DIVIDER = 10//10;
+const KEY_WEIGHT_DIVIDER = 10; //10;
 const MINOR_KEY_WEIGHT_SUBTRACT = 0.0;
 const FROM_NEXT_NEIGHBOR_UPDATE_FACTOR = 0.8;
 const FROM_PREV_NEIGHBOR_UPDATE_FACTOR = 0.3;
@@ -16,28 +16,7 @@ const V_I_UPDATE_FACTOR = 2;
 const ENABLE_SEC_DOM = false;
 const ENABLE_TT = true;
 
-export enum Quality {
-  maj7 = 'maj7',
-  dom7 = '7',
-  m7 = 'm7',
-  m7b5 = 'm7b5',
-  o7 = 'o7',
-}
 
-export function qualityToString(quality: Quality): string {
-  switch (quality) {
-    case Quality.maj7:
-      return '';
-    case Quality.dom7:
-      return '7';
-    case Quality.m7:
-      return 'm7';
-    case Quality.m7b5:
-      return 'm7b5';
-    case Quality.o7:
-      return 'o7';
-  }
-}
 
 function assert(condition: any, msg?: string): asserts condition {
   if (!condition) {
@@ -67,7 +46,7 @@ export class Chord {
   constructor(input: string, scale: string[]) {
     this.input = input;
     this.scale = scale;
-    this.getRomanNumeral();
+    this.initialize();
     this.analyzeRomanQuality();
   }
 
@@ -79,8 +58,8 @@ export class Chord {
     // const maxWeight = Math.max(...this.weights);
     // const maxIndex = this.weights.indexOf(maxWeight);
     // return this.harmonicFunctions[maxIndex];
-    console.log(this.input)
-    console.log(this.harmonicFunctions)
+    console.log(this.input);
+    console.log(this.harmonicFunctions);
     return this.getHarmonicFunctionsSorted()[0].toString();
   }
 
@@ -104,7 +83,7 @@ export class Chord {
     // console.log("AFT", this.input, this.harmonicFunctions);
   }
 
-  updateiiV(previous: Chord) : void {
+  updateiiV(previous: Chord): void {
     for (const prevHarmonicFunction of previous.harmonicFunctions) {
       for (const harmonicFunction of this.harmonicFunctions) {
         if (prevHarmonicFunction.key === harmonicFunction.key) {
@@ -156,29 +135,15 @@ export class Chord {
     return sortedFunctions;
   }
 
-  private newkey(scaleDistance: number): string {
-    let index = (this.scaleIndex + scaleDistance) % 12;
-    while (index < 0) {
-      index += 12;
-    }
-    // console.log('index', index);
-    return allRomanNumerals[index];
-  }
-
-  private keyDistance(key: string): number {
-    // console.log('keyDistance: key', key, 'keyCircle.indexOf(key)', keyCircle.indexOf(key));
-    return 1 - keyCircle.indexOf(key) / KEY_WEIGHT_DIVIDER;
-  }
-
   private addHarmonicFunctionHelper(posStr: string, quality: Quality, scaleDistance: number) {
-    const key = this.newkey(scaleDistance);
-    const keyDist = this.keyDistance(key);
+    const key = newKey(scaleDistance, this.scaleIndex);
+    const keyDist = 1 - keyCircle.indexOf(key) / KEY_WEIGHT_DIVIDER;
     // console.log('key', key, 'keyDist', keyDist);
     this.addHarmonicFunction(key, posStr, quality, keyDist);
   }
 
   private addMinorHarmonicFunctionHelper(posStr: string, quality: Quality, scaleDistance: number) {
-    const key = this.newkey(scaleDistance);
+    const key = newKey(scaleDistance, this.scaleIndex);
     const minorKey = key.toLowerCase();
     assert(minorKeyCircle.indexOf(minorKey) >= 0, `minorKey ${minorKey} not found`);
     const minorKeyDist = 1 - minorKeyCircle.indexOf(minorKey) / KEY_WEIGHT_DIVIDER - MINOR_KEY_WEIGHT_SUBTRACT;
@@ -228,10 +193,9 @@ export class Chord {
       this.addHarmonicFunctionHelper('vi', Quality.m7, -9);
       this.addHarmonicFunctionHelper('iv', Quality.m7, -5);
       if (ENABLE_TT) {
-       this.addHarmonicFunctionHelper('tt', Quality.m7, -8);
+        this.addHarmonicFunctionHelper('tt', Quality.m7, -8);
       }
       // this.addMinorHarmonicFunctionHelper('i', Quality.m7, 0); // minor
-
     }
 
     if (this.quality === Quality.m7b5) {
@@ -245,132 +209,19 @@ export class Chord {
       this.addMinorHarmonicFunctionHelper('vii', Quality.o7, -5);
       this.addMinorHarmonicFunctionHelper('vii', Quality.o7, -8);
     }
-
-    // console.log(this.scaleIndex);
-    // console.log(this.input, this.harmonicFunctions);
   }
 
-  /**
-   * Get the roman numeral representation of a chord
-   *
-   * @method getRomanNumeral
-   * @param {string} inputChord - The chord to analyze
-   * @returns {string} The roman numeral representation of the chord
-   */
-  private getRomanNumeral(): void {
-    this.root = this.getChordRoot();
-    if (this.root === '') {
-      throw new Error('Invalid chord: ' + this.input);
-    }
+  private initialize(): void {
+    this.root = getChordRoot(this.input);
+    this.quality = getChordQuality(this.input);
 
-    const quality = this.getChordQuality();
-    const rootRomanNumeral = this.rootToRomanNumeral();
-    // console.log('root:', this.root);
-    // console.log('quality:', quality);
-    // console.log('rootRomanNumeral:', rootRomanNumeral);
-    const isMajor = quality === 'maj' || quality === 'maj7' || quality === '7' || quality === '';
-    const isMinor7th = quality === 'm7';
-    const isDiminished = quality === 'dim7';
-    const isHalfDiminished = quality === 'm7b5';
+    const rootRomanNumeral = rootToRomanNumeral(this.scale, this.root);
 
-    this.quality = quality === '7' ? Quality.dom7 : Quality.maj7;
-    if (isDiminished) {
-      this.quality = Quality.o7;
-    }
-    if (isMinor7th) {
-      this.quality = Quality.m7;
-    }
-    if (isHalfDiminished) {
-      this.quality = Quality.m7b5;
-    }
+    this.scaleIndex = scaleIndex(rootRomanNumeral);
 
-    this.romanNumeral = (isMajor ? rootRomanNumeral : rootRomanNumeral.toLowerCase()) + qualityToString(this.quality);
-  }
-
-  /**
-   * Get the root of a chord
-   *
-   * @method getChordRoot
-   * @param {string} chord - The chord to analyze
-   * @returns {string} The root of the chord
-   */
-  private getChordRoot(): string {
-    const matchResult = this.input.match(/[A-G][#b]?/);
-    return matchResult ? matchResult[0] : '';
-  }
-
-  /**
-   * Get the quality of a chord
-   *
-   * @method getChordQuality
-   * @param {string} chord - The chord to analyze
-   * @returns {string} The quality of the chord
-   */
-  private getChordQuality(): string {
-    const matchResult = this.input.match(/maj7|m7b5|m7|dim7|aug7|7|m/);
-    // console.log('matchResult:', matchResult);
-    return matchResult ? matchResult[0] : '';
-  }
-
-  private rootToRomanNumeral(): string {
-    let localScaleIndex = this.scale.indexOf(this.root);
-
-    let romanNumeral = romanNumerals[localScaleIndex];
-    // if index is not found, try flatting the this.root and search again
-    if (romanNumeral) {
-      this.scaleIndex = allRomanNumerals.indexOf(romanNumeral);
-      assert(
-        this.scaleIndex >= 0 && this.scaleIndex < 12,
-        `${this.input}:  scaleIndex ${this.scaleIndex} out of range`,
-      );
-      return romanNumeral;
-    }
-
-    const flatRoot = this.flatten(this.root);
-    localScaleIndex = this.scale.indexOf(flatRoot);
-    romanNumeral = romanNumerals[localScaleIndex];
-    if (romanNumeral) {
-      // TODO: does not work for sharps!!!!
-      romanNumeral = '#' + romanNumeral;
-      this.scaleIndex = allRomanNumerals.indexOf(romanNumeral);
-      if (this.scaleIndex < 0) {
-        this.scaleIndex = allSharpRomanNumerals.indexOf(romanNumeral);
-      }
-      assert(
-        this.scaleIndex >= 0 && this.scaleIndex < 12,
-        `${this.input}:  scaleIndex ${this.scaleIndex} out of range`,
-      );
-      return romanNumeral;
-    }
-
-    const sharpRoot = this.sharpen(this.root);
-    localScaleIndex = this.scale.indexOf(sharpRoot);
-    romanNumeral = romanNumerals[localScaleIndex];
-    if (romanNumeral) {
-      romanNumeral = 'b' + romanNumeral;
-      this.scaleIndex = allRomanNumerals.indexOf(romanNumeral);
-      assert(
-        this.scaleIndex >= 0 && this.scaleIndex < 12,
-        `${this.input}:  scaleIndex ${this.scaleIndex} out of range`,
-      );
-      return romanNumeral;
-    }
-
-    this.scaleIndex = localScaleIndex;
-    assert(this.scaleIndex >= 0 && this.scaleIndex < 12, `${this.input}:  scaleIndex ${this.scaleIndex} out of range`);
-
-    return this.root;
-  }
-
-  /**
-   * if note is sharp remove the sharp
-   * otherwise add a flat
-   */
-  private flatten(note: string): string {
-    return note.includes('#') ? note.slice(0, 1) : note + 'b';
-  }
-
-  private sharpen(note: string): string {
-    return note.includes('b') ? note.slice(0, 1) : note + '#';
+    this.romanNumeral =
+      (this.quality === Quality.dom7 || this.quality === Quality.maj7
+        ? rootRomanNumeral
+        : rootRomanNumeral.toLowerCase()) + qualityToString(this.quality);
   }
 }

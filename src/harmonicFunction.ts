@@ -1,4 +1,4 @@
-import { Quality, qualityToString } from './chord';
+import { Quality, qualityToString } from "./chordName";
 
 const SHOW_WEIGHT = false;
 

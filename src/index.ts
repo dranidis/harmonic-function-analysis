@@ -221,5 +221,5 @@ const illRememberAprilBars =
 // console.log(a.analyzeBars(yourSteppedBars, 'C'));
 // console.log(a.analyzeBars(iRememberYouBars, 'F'));
 // console.log(a.analyzeBars(stellaByStarlightBars, 'Bb'));
-console.log(a.analyzeBars(illRememberAprilBars, 'G'));
+// console.log(a.analyzeBars(illRememberAprilBars, 'G'));
 // console.log(a.analyzeBars(allTheThingsYouAreBars, 'Ab'));
