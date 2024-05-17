@@ -1,4 +1,5 @@
 import { Chord } from './chord';
+import { ChordName } from './chordName';
 import { getScale } from './scale';
 
 /**
@@ -69,7 +70,7 @@ export class ChordRomanAnalyzer {
   analyze(chordStrings: string[], key: string): string[] {
     this.key = key;
     this.scale = getScale(this.key);
-    const chords = chordStrings.map((chortStr) => new Chord(chortStr, this.scale));
+    const chords = chordStrings.map((chortStr) => new Chord(new ChordName(chortStr), this.scale));
 
     this.updateWeights(chords);
     // this.updateWeights(chords);
@@ -79,13 +80,13 @@ export class ChordRomanAnalyzer {
       if (this.options.showFunctions) {
         if (this.options.allHarmonicFunctions) {
           // return chord.getHarmonicFunction();
-          return chord.input + ' : ' + chord.getHarmonicFunction();
+          return chord.chordName + ' : ' + chord.getHarmonicFunction();
           // return chord.input + '[' + chord.getHarmonicFunctionsSorted().join() + ']'
           // return chord.getHighestHarmonicFunctions().join()
         }
         return chord.getHarmonicFunction();
       }
-      return chord.romanNumeral;
+      return chord.chordName.romanNumeral;
     });
   }
 

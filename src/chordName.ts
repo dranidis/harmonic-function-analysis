@@ -1,3 +1,6 @@
+import { rootToRomanNumeral } from "./note";
+import { scaleIndex } from "./roman";
+
 export enum Quality {
   maj7 = 'maj7',
   dom7 = '7',
@@ -23,6 +26,44 @@ export function qualityToString(quality: Quality): string {
       return '';
   }
 }
+
+export class ChordName {
+  input =  '';
+  root = '';
+  quality = Quality.maj7;
+  private _romanNumeral = '';
+
+  constructor(input: string) {
+    this.input = input;
+    this.initialize();
+  }
+
+  get romanNumeral(): string {
+    return this._romanNumeral;
+  }
+
+  initialize() : void {
+    this.root = getChordRoot(this.input);
+    this.quality = getChordQuality(this.input);
+  }
+
+  rootToRomanNumeral(scale: string[]): string {
+    const rootRomanNumeral = rootToRomanNumeral(scale, this.root);
+    this._romanNumeral = this.getRomanNumeral(rootRomanNumeral);
+    return rootRomanNumeral;
+  }  
+
+  private getRomanNumeral(rootRomanNumeral: string): string {
+    return (this.quality === Quality.dom7 || this.quality === Quality.maj7
+      ? rootRomanNumeral
+      : rootRomanNumeral.toLowerCase()) + qualityToString(this.quality);
+  }
+
+  getScaleIndex(scale: string[]): number {
+    return scaleIndex(this.rootToRomanNumeral(scale));
+  }
+}
+
   /**
    * Get the root of a chord
    *
