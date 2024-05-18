@@ -19,7 +19,7 @@ export function qualityToString(quality: Quality): string {
     case Quality.m7:
       return 'm7';
     case Quality.m7b5:
-      return 'm7b5';
+      return 'ø7';
     case Quality.o7:
       return 'o7';
     case Quality.m:

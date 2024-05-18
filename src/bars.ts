@@ -32,6 +32,7 @@ export function processBars(input: string): ChordInBar[] {
 export function printBars(
   chords: ChordInBar[],
   changeOfLineEveryBars = 4,
+  showOriginalChords = false,
 ): string {
   const bars: string[] = [];
   let barCount = 0;
@@ -49,18 +50,25 @@ export function printBars(
     // if the next chord is in the same bar and in the same key
     // print the two harmonic functions together
     if (i + 1 < chords.length && chords[i + 1].bar === chord.bar) {
-      const chord1 = chord.analyzedChord;
-      const chord2 = chords[i+1].analyzedChord;
+      const chord1 =
+        (showOriginalChords ? chord.chord + ':' : '') + chord.analyzedChord;
+      const chord2 =
+        (showOriginalChords ? chords[i + 1].chord + ':' : '') +
+        chords[i + 1].analyzedChord;
       // check if they share the same '/...' suffix
       const key = chord1.split('/')[1];
       if (key && key === chord2.split('/')[1]) {
-        currentBar += ' ' + chord1.split('/')[0] + '-' + chord2.split('/')[0] + '/' + key;
+        currentBar +=
+          ' ' + chord1.split('/')[0] + '-' + chord2.split('/')[0] + '/' + key;
         i++;
       } else {
         currentBar += ' ' + chord1;
       }
     } else {
-      currentBar += ' ' + chord.analyzedChord;
+      currentBar +=
+        ' ' +
+        (showOriginalChords ? chord.chord + ': ' : '') +
+        chord.analyzedChord;
     }
   }
   bars.push(currentBar);

@@ -1,7 +1,5 @@
 import { Quality, qualityToString } from "./chordName";
 
-const SHOW_WEIGHT = false;
-
 export class HarmonicFunction {
   private _key: string;
   private _position: string;
@@ -15,7 +13,7 @@ export class HarmonicFunction {
     this._weight = weight;
   }
 
-  toString(): string {
+  toString(showWeight = false): string {
     let output = '';
     // if the first character of the position is 'S' then it is a secondary dominant
     // in that case extract the rest of the position
@@ -25,7 +23,7 @@ export class HarmonicFunction {
 
     output = `${this._position}` + qualityToString(this.quality) + (this._key === 'I' ? '' : `/${this._key}`);
 
-    return output + (SHOW_WEIGHT ? ` (${this._weight.toPrecision(2)})` : '');
+    return output + (showWeight ? ` (${this._weight.toPrecision(2)})` : '');
   }
 
   get weight(): number {
