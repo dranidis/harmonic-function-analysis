@@ -1,0 +1,75 @@
+export const std = { 
+  yourSteppedBars :
+  '| Cmaj7 |     | Dbmaj7   |        ' +
+  '| Eb7   |     | Abmaj7   |        ' +
+  '| Gm7   | C7  | Fmaj7    |        ' +
+  '| Fm7   | Bb7 | Ebm7 Ab7 | Dm7 G7 ' +
+  '| Cmaj7 |     | Dbmaj7   |        ' +
+  '| Eb7   |     | Gb7      | F7     ' +
+  '| Dm7b5 | G7  | Em7      | A7     ' +
+  '| Dm7   | G7  | Cmaj7    | Dm7 G7 ',
+
+yourSteppedBars1 :
+  '| Cmaj7 |     | Dbmaj7   |        ' +
+  '| Eb7   |     | Abmaj7   |        ' +
+  '| Gm7   | C7  | Fmaj7    |        ' +
+  '| Am7   | D7  | Ebm7 Ab7 | Dm7 G7 ' +
+  '| Cmaj7 |     | Dbmaj7   |        ' +
+  '| Eb7   |     | Gb7      | F7     ' +
+  '| Dm7b5 | G7  | Em7      | A7     ' +
+  '| Dm7   | G7  | Cmaj7    | Dm7 G7 ',
+
+allTheThingsYouAreBars :
+  '| Fm7  | Bbm7 | Eb7    | Abmaj7   | Dbmaj7 | G7       | Cmaj7 |       ' +
+  '| Cm7  | Fm7  | Bb7    | Ebmaj7   | Abmaj7 | Am7b5 D7 | Gmaj7 | E7    ' +
+  '| Am7  | D7   | Gmaj7  |          | F#m7b5 | B7       | Emaj7 | C7    ' +
+  '| Fm7  | Bbm7 | Eb7    | Abmaj7   | Dbmaj7 | Gb7      | Cm7   | Bdim7 ' +
+  '| Bbm7 | Eb7  | Abmaj7 | Gm7b5 C7 ',
+
+iRememberYouBars :
+  '| Fmaj7   | Bm7b5 E7 | Fmaj7    | Cm7 F7 ' +
+  '| Bbmaj7  | Bbm7 Eb7 | Fmaj7    | Gm7 C7 ' +
+  '| Fmaj7   | Bm7b5 E7 | Fmaj7    | Cm7 F7 ' +
+  '| Bbmaj7  | Bbm7 Eb7 | Fmaj7    | Cm7 F7 ' +
+  '| Bbmaj7  | Em7 A7   | Dmaj7    | Em7 A7 ' +
+  '| Dmaj7   | Dm7 G7   | Cmaj7    | Gm7 C7 ' +
+  '| Fmaj7   | Bm7b5 E7 | Fmaj7    | Am7b5 D7 ' +
+  '| Gm7     | Bbm7 Eb7 | Am7      | D7 ' +
+  '| Gm7     | C7       | Fmaj7 D7 | Gm7 C7 ',
+
+stellaByStarlightBars :
+  '| Em7b5  | A7       | Cm7    | F7 ' +
+  '| Fm7    | Bb7      | Ebmaj7 | Ab7 ' +
+  '| Bbmaj7 | Em7b5 A7 | Dm7    | Bbm7 Eb7 ' +
+  '| Fmaj7  | Em7b5 A7 | Am7b5  | D7' +
+  '| G7     |          | Cm7    | ' +
+  '| Ab7    |          | Bbmaj7 | ' +
+  '| Em7b5  | A7       | Dm7b5  | G7 ' +
+  '| Cm7b5  | F7       | Bbmaj7 | ',
+
+illRememberAprilBars :
+  '| Gmaj7  |    |        | ' +
+  '| Gm7    |    |        | ' +
+  '| Am7b5  | D7 | Bm7b5  | E7 ' +
+  '| Am7    | D7 | Gmaj7  | G7  ' +
+  '| Cm7    | F7 | Bbmaj7 | Gm7 ' +
+  '| Cm7    | F7 | Bbmaj7 |  ' +
+  '| Am7    | D7 | Gmaj7  |  ' +
+  '| F#m7b5 | B7 | Emaj7  | Am7 D7 ' +
+  '| Gmaj7  |    |        | ' +
+  '| Gm7    |    |        | ' +
+  '| Am7b5  | D7 | Bm7b5  | E7 ' +
+  '| Am7    | D7 | Gmaj7  | Am7 D7  ',
+
+girlFromIpanemaBars :
+  '| Fmaj7 | Fmaj7 | G7 | G7' +
+  '| Gm7 | Gb7 | Fmaj7 | Gb7 ' +
+  '| Fmaj7 | Fmaj7 | G7 | G7' +
+  '| Gm7 | Gb7 | Fmaj7 |  ' +
+  '| Gbmaj7 |  | B7 | ' +
+  '| F#m7 | | D7 | ' +
+  '| Gm7 | | Eb7 | ' +
+  '| Am7 | D7 | Gm7 | C7 ' +
+  '| Fmaj7 | Fmaj7 | G7 | G7' +
+  '| Gm7 | Gb7 | Fmaj7 | Gb7 ',
+};

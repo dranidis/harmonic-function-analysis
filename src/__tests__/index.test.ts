@@ -1,9 +1,7 @@
 import {
   ChordRomanAnalyzer,
-  stellaByStarlightBars,
-  yourSteppedBars,
-  yourSteppedBars1,
 } from '../';
+import { std }  from '../examples';
 import { getScale } from '../scale';
 
 describe('RomanAnalyzer', () => {
@@ -68,7 +66,7 @@ describe('RomanAnalyzer', () => {
   });
 
   test('secondary dominants', () => {
-    const romanAnalyzer = new ChordRomanAnalyzer();
+    const romanAnalyzer = new ChordRomanAnalyzer().showAnalysis(true);
     romanAnalyzer.showFunctions(true);
     expect(
       romanAnalyzer.analyze(['B7', 'E7', 'A7', 'D7', 'G7', 'C7'], 'C'),
@@ -204,11 +202,38 @@ describe('RomanAnalyzer', () => {
     ).toEqual(['I', 'viio7/ii', 'iim7', 'viio7/iii', 'iiim7']);
   });
 
+  test('iiim7-V7/ii-iim7', () => {
+    const romanAnalyzer = new ChordRomanAnalyzer().showAnalysis(true);
+    romanAnalyzer.showFunctions(true);
+    expect(
+      romanAnalyzer.analyze(['Em7', 'A7', 'Dm7'], 'C'),
+    ).toEqual(['iiim7', 'V7/ii', 'iim7']);
+  });
+
+  test('vim7-V7/V-V7', () => {
+    const romanAnalyzer = new ChordRomanAnalyzer().showAnalysis(true);
+    romanAnalyzer.showFunctions(true);
+    expect(
+      romanAnalyzer.analyze(['Em7', 'A7', 'D7'], 'G'),
+    ).toEqual(['vim7', 'V7/V', 'V7',]);
+  });
+
+  test('iiø7/vi V7/vi vim7', () => {
+    const romanAnalyzer = new ChordRomanAnalyzer().showAnalysis(true);
+    romanAnalyzer.showFunctions(true);
+    expect(
+      romanAnalyzer.analyze(['Em7b5', 'A7', 'Dm7'], 'F'),
+    ).toEqual(['iiø7/vi', 'V7/vi', 'vim7',]);
+  });
+});
+
+describe('standards', () => {
+
   test('stella by starlight', () => {
     const romanAnalyzer = new ChordRomanAnalyzer();
     romanAnalyzer.showFunctions(true);
     // delete all '|' characters
-    const chords = stellaByStarlightBars
+    const chords = std.stellaByStarlightBars
       .replace(/\|/g, '')
       .split(' ')
       .filter((chord) => chord !== '');
@@ -252,7 +277,7 @@ describe('RomanAnalyzer', () => {
     const romanAnalyzer = new ChordRomanAnalyzer();
     romanAnalyzer.showFunctions(true);
     // delete all '|' characters
-    const chords = yourSteppedBars1
+    const chords = std.yourSteppedBars1
       .replace(/\|/g, '')
       .split(' ')
       .filter((chord) => chord !== '')
@@ -267,7 +292,7 @@ describe('RomanAnalyzer', () => {
       'iim7/IV',
       'V7/IV',
       'IV',
-      'iim7/V',
+      'vim7',
       'V7/V',
       'ttm7/V',
       'TT7/V',
@@ -282,3 +307,4 @@ describe('getScale', () => {
     expect(getScale('F')).toEqual(['F', 'G', 'A', 'Bb', 'C', 'D', 'E', 'F']);
   });
 });
+

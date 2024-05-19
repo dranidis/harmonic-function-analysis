@@ -1,6 +1,6 @@
 {
-  "name": "music-roman-analysis",
-  "version": "1.0.2",
+  "name": "harmonic-function-analysis",
+  "version": "0.0.1",
   "description": "Analyzes harmonically a chord progression using roman numerals",
   "main": "dist/index.js",
   "types": "dist/index.d.js",
@@ -22,10 +22,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/dranidis/music-roman-analysis.git"
+    "url": "https://github.com/dranidis/harmonic-function-analysis.git"
   },
   "bugs": {
-    "url": "https://github.com/dranidis/music-roman-analysis/issues"
+    "url": "https://github.com/dranidis/harmonic-function-analysis/issues"
   },
   "author": "D Dranidis",
   "license": "MIT",

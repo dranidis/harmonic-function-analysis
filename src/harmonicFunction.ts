@@ -19,9 +19,9 @@ export class HarmonicFunction {
     // in that case extract the rest of the position
     if (this._position[0] === 'S' && this._key === 'I') {
       output = `V7/${this._position.slice(1)}`;
+    } else {
+      output = `${this._position}` + qualityToString(this.quality) + (this._key === 'I' ? '' : `/${this._key}`);
     }
-
-    output = `${this._position}` + qualityToString(this.quality) + (this._key === 'I' ? '' : `/${this._key}`);
 
     return output + (showWeight ? ` (${this._weight.toPrecision(2)})` : '');
   }

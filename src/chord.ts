@@ -8,10 +8,10 @@ const KEY_WEIGHT_DIVIDER = 10; //10;
 const MINOR_KEY_WEIGHT_SUBTRACT = 0.0;
 const FROM_NEXT_NEIGHBOR_UPDATE_FACTOR = 0.0;
 const FROM_PREV_NEIGHBOR_UPDATE_FACTOR = 0.0;
-export const II_V_UPDATE_FACTOR = 4;
-export const V_I_UPDATE_FACTOR = 5;
+export const II_V_UPDATE_FACTOR = 1.0;//4;
+export const V_I_UPDATE_FACTOR = 10; //5;
 
-const ENABLE_SEC_DOM = false;
+const ENABLE_SEC_DOM = true;
 const ENABLE_TT = true;
 
 export class Chord {
@@ -52,7 +52,7 @@ export class Chord {
   updateWeights(previous: Chord | null, next: Chord | null): void {
     if (previous) {
       this.updateWeightsHelper(previous, FROM_PREV_NEIGHBOR_UPDATE_FACTOR);
-      this.updateiiV(previous);
+      this.updateVI(previous);
     }
     if (next) {
       this.updateWeightsHelper(next, FROM_NEXT_NEIGHBOR_UPDATE_FACTOR);
@@ -62,7 +62,7 @@ export class Chord {
   updateWeights2(previous: Chord | null, next: Chord | null): void {
     if (previous) {
       this.updateWeightsHelper(previous, FROM_PREV_NEIGHBOR_UPDATE_FACTOR);
-      this.updateVI(previous);
+      this.updateiiV(previous);
     }
     if (next) {
       this.updateWeightsHelper(next, FROM_NEXT_NEIGHBOR_UPDATE_FACTOR);

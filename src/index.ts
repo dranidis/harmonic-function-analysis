@@ -1,6 +1,7 @@
 import { printBars, processBars } from './bars';
 import { Chord } from './chord';
 import { ChordName } from './chordName';
+import { std } from './examples';
 import { getScale } from './scale';
 
 export class ChordRomanAnalyzer {
@@ -63,12 +64,13 @@ export class ChordRomanAnalyzer {
       chords.forEach((chord) => {
         chord.showFunctions();
       });
+      chords.forEach((chord) => {
+        console.log(chord.chordName.input);
+        console.log(chord.harmonicFunctions);
+      });
     }
 
-    chords.forEach((chord) => {
-      console.log(chord.chordName.input);
-      console.log(chord.harmonicFunctions);
-    });
+
 
     this.updateWeights(chords);
     this.updateWeights(chords, true);
@@ -77,12 +79,11 @@ export class ChordRomanAnalyzer {
       chords.forEach((chord) => {
         chord.showFunctions();
       });
+      chords.forEach((chord) => {
+        console.log(chord.chordName.input);
+        console.log(chord.harmonicFunctions);
+      });
     }
-
-    chords.forEach((chord) => {
-      console.log(chord.chordName.input);
-      console.log(chord.harmonicFunctions);
-    });
 
     return chords.map((chord) => {
       if (this.options.showFunctions) {
@@ -131,87 +132,12 @@ const a = new ChordRomanAnalyzer()
   .showFunctions(true)
   .showOriginalChords(true)
   .showAllHarmonicFunctions(false)
-  .showAnalysis(true);
+  .showAnalysis(false);
 
-// console.log(a.printBars(a.processBars('|Cmaj7  |Am7 D7|Gm7 C7|Fmaj7|', 'C')));
-export const yourSteppedBars =
-  '| Cmaj7 |     | Dbmaj7   |        ' +
-  '| Eb7   |     | Abmaj7   |        ' +
-  '| Gm7   | C7  | Fmaj7    |        ' +
-  '| Fm7   | Bb7 | Ebm7 Ab7 | Dm7 G7 ' +
-  '| Cmaj7 |     | Dbmaj7   |        ' +
-  '| Eb7   |     | Gb7      | F7     ' +
-  '| Dm7b5 | G7  | Em7      | A7     ' +
-  '| Dm7   | G7  | Cmaj7    | Dm7 G7 ';
-
-export const yourSteppedBars1 =
-  '| Cmaj7 |     | Dbmaj7   |        ' +
-  '| Eb7   |     | Abmaj7   |        ' +
-  '| Gm7   | C7  | Fmaj7    |        ' +
-  '| Am7   | D7  | Ebm7 Ab7 | Dm7 G7 ' +
-  '| Cmaj7 |     | Dbmaj7   |        ' +
-  '| Eb7   |     | Gb7      | F7     ' +
-  '| Dm7b5 | G7  | Em7      | A7     ' +
-  '| Dm7   | G7  | Cmaj7    | Dm7 G7 ';
-
-const allTheThingsYouAreBars =
-  '| Fm7  | Bbm7 | Eb7    | Abmaj7   | Dbmaj7 | G7       | Cmaj7 |       ' +
-  '| Cm7  | Fm7  | Bb7    | Ebmaj7   | Abmaj7 | Am7b5 D7 | Gmaj7 | E7    ' +
-  '| Am7  | D7   | Gmaj7  |          | F#m7b5 | B7       | Emaj7 | C7    ' +
-  '| Fm7  | Bbm7 | Eb7    | Abmaj7   | Dbmaj7 | Gb7      | Cm7   | Bdim7 ' +
-  '| Bbm7 | Eb7  | Abmaj7 | Gm7b5 C7 ';
-
-const iRememberYouBars =
-  '| Fmaj7   | Bm7b5 E7 | Fmaj7    | Cm7 F7 ' +
-  '| Bbmaj7  | Bbm7 Eb7 | Fmaj7    | Gm7 C7 ' +
-  '| Fmaj7   | Bm7b5 E7 | Fmaj7    | Cm7 F7 ' +
-  '| Bbmaj7  | Bbm7 Eb7 | Fmaj7    | Cm7 F7 ' +
-  '| Bbmaj7  | Em7 A7   | Dmaj7    | Em7 A7 ' +
-  '| Dmaj7   | Dm7 G7   | Cmaj7    | Gm7 C7 ' +
-  '| Fmaj7   | Bm7b5 E7 | Fmaj7    | Am7b5 D7 ' +
-  '| Gm7     | Bbm7 Eb7 | Am7      | D7 ' +
-  '| Gm7     | C7       | Fmaj7 D7 | Gm7 C7 ';
-
-export const stellaByStarlightBars =
-  '| Em7b5  | A7       | Cm7    | F7 ' +
-  '| Fm7    | Bb7      | Ebmaj7 | Ab7 ' +
-  '| Bbmaj7 | Em7b5 A7 | Dm7    | Bbm7 Eb7 ' +
-  '| Fmaj7  | Em7b5 A7 | Am7b5  | D7' +
-  '| G7     |          | Cm7    | ' +
-  '| Ab7    |          | Bbmaj7 | ' +
-  '| Em7b5  | A7       | Dm7b5  | G7 ' +
-  '| Cm7b5  | F7       | Bbmaj7 | ';
-
-const illRememberAprilBars =
-  '| Gmaj7  |    |        | ' +
-  '| Gm7    |    |        | ' +
-  '| Am7b5  | D7 | Bm7b5  | E7 ' +
-  '| Am7    | D7 | Gmaj7  | G7  ' +
-  '| Cm7    | F7 | Bbmaj7 | Gm7 ' +
-  '| Cm7    | F7 | Bbmaj7 |  ' +
-  '| Am7    | D7 | Gmaj7  |  ' +
-  '| F#m7b5 | B7 | Emaj7  | Am7 D7 ' +
-  '| Gmaj7  |    |        | ' +
-  '| Gm7    |    |        | ' +
-  '| Am7b5  | D7 | Bm7b5  | E7 ' +
-  '| Am7    | D7 | Gmaj7  | Am7 D7  ';
-
-const girlFromIpanemaBars =
-  '| Fmaj7 | Fmaj7 | G7 | G7' +
-  '| Gm7 | Gb7 | Fmaj7 | Gb7 ' +
-  '| Fmaj7 | Fmaj7 | G7 | G7' +
-  '| Gm7 | Gb7 | Fmaj7 |  ' +
-  '| Gbmaj7 |  | B7 | ' +
-  '| F#m7 | | D7 | ' +
-  '| Gm7 | | Eb7 | ' +
-  '| Am7 | D7 | Gm7 | C7 ' +
-  '| Fmaj7 | Fmaj7 | G7 | G7' +
-  '| Gm7 | Gb7 | Fmaj7 | Gb7 ';
-
-// console.log(a.analyzeBars(girlFromIpanemaBars, 'F'));
-
-// console.log(a.analyzeBars(yourSteppedBars1, 'C'));
-// console.log(a.analyzeBars(iRememberYouBars, 'F'));
-// console.log(a.analyzeBars(stellaByStarlightBars, 'Bb'));
-// console.log(a.analyzeBars(illRememberAprilBars, 'G'));
-console.log(a.analyzeBars(allTheThingsYouAreBars, 'Ab'));
+// console.log(a.analyzeBars(std.girlFromIpanemaBars, 'F'));
+// console.log(a.analyzeBars(std.yourSteppedBars1, 'C'));
+// console.log(a.analyzeBars(std.iRememberYouBars, 'F'));
+// console.log(a.analyzeBars(std.stellaByStarlightBars, 'Bb'));
+// console.log(a.analyzeBars(std.illRememberAprilBars, 'G'));
+// console.log(a.analyzeBars(std.allTheThingsYouAreBars, 'Ab'));
+console.log(a.analyzeBars('|D D7 | G Bb | D', 'D'));
