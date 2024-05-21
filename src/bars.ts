@@ -51,7 +51,7 @@ export function printBars(
     // print the two harmonic functions together
     if (i + 1 < chords.length && chords[i + 1].bar === chord.bar) {
       const chord1 =
-        (showOriginalChords ? chord.chord + ':' : '') + chord.analyzedChord;
+        (showOriginalChords ? chord.chord + ': ' : '') + chord.analyzedChord;
       const chord2 =
         (showOriginalChords ? chords[i + 1].chord + ':' : '') +
         chords[i + 1].analyzedChord;

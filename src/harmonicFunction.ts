@@ -1,4 +1,4 @@
-import { Quality, qualityToString } from "./chordName";
+import { Quality, qualityToString } from "./chord";
 
 export class HarmonicFunction {
   private _key: string;
@@ -19,7 +19,9 @@ export class HarmonicFunction {
     // in that case extract the rest of the position
     if (this._position[0] === 'S' && this._key === 'I') {
       output = `V7/${this._position.slice(1)}`;
-    } else {
+    } else if (this._position[0] === 'T' && this._key === 'I') {
+      output = `TT7/${this._position.slice(1)}`;
+    } else  {
       output = `${this._position}` + qualityToString(this.quality) + (this._key === 'I' ? '' : `/${this._key}`);
     }
 

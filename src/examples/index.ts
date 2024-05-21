@@ -72,4 +72,33 @@ girlFromIpanemaBars :
   '| Am7 | D7 | Gm7 | C7 ' +
   '| Fmaj7 | Fmaj7 | G7 | G7' +
   '| Gm7 | Gb7 | Fmaj7 | Gb7 ',
+
+  theDaysOfWineAndRosesBars :
+  '| Fmaj7    | Eb7    | D7    | ' +
+  '| Gm7      |        | Bbm7  | Eb7 ' +
+  '| Am7      | Dm7    | Gm7   | C7 ' +
+  '| Em7b5 A7 | Dm7 G7 | Gm7   | C7 ' +
+  '| Fmaj7    | Eb7    | D7    | ' +
+  '| Gm7      |        | Bbm7  | Eb7 ' +
+  '| Am7      | Dm7    | Bm7b5  | Bb7 ' +
+  '| Am7 Dm7  | Gm7 C7 | Fmaj7 | Gm7 C7 ',
+
+  allOfMeBars:
+  '| Cmaj7 |     | E7         |    | A7  |    | Dm7 |    ' +
+  '| E7    |     | Am7        |    | D7  |    | Dm7 | G7 ' +
+  '| Cmaj7 |     | E7         |    | A7  |    | Dm7 |    ' +
+  '| Fmaj7 | Fm7 | Cmaj7  Em7 | A7 | Dm7 | G7 | Cmaj7 Ebo7 | Dm7 G7 ',
+
+  haveYouMetMissJonesBars:
+  '| Gmaj7 | G#o7 | Am7 | D7 ' +
+  '| Bm7 | Em7 | Am7 | D7 ' +
+  '| Gmaj7 | G#o7 | Am7 | D7 ' +
+  '| Bm7 | Em7 | Dm7 | G7 ' +
+  '| Cmaj7 | Bbm7 Eb7 | Abmaj7 | F#m7 B7' +
+  '| Emaj7 | Bbm7 Eb7 | Abmaj7 | Am7 D7' +
+  '| Gmaj7 | G#o7 | Am7 | D7 C7' +
+  '| Bm7 E7 | Am7 D7 | Gmaj7 | Am7 D7',
+
 };
+
+

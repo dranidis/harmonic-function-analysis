@@ -1,6 +1,6 @@
 import { printBars, processBars } from './bars';
+import { ChordAnalysis } from './chordAnalysis';
 import { Chord } from './chord';
-import { ChordName } from './chordName';
 import { std } from './examples';
 import { getScale } from './scale';
 
@@ -57,7 +57,7 @@ export class ChordRomanAnalyzer {
     this.key = key;
     this.scale = getScale(this.key);
     const chords = chordStrings.map(
-      (chortStr) => new Chord(new ChordName(chortStr), this.scale),
+      (chortStr) => new ChordAnalysis(new Chord(chortStr), this.scale),
     );
 
     if (this.options.showAnalysis) {
@@ -65,7 +65,7 @@ export class ChordRomanAnalyzer {
         chord.showFunctions();
       });
       chords.forEach((chord) => {
-        console.log(chord.chordName.input);
+        console.log(chord.chord.input);
         console.log(chord.harmonicFunctions);
       });
     }
@@ -80,7 +80,7 @@ export class ChordRomanAnalyzer {
         chord.showFunctions();
       });
       chords.forEach((chord) => {
-        console.log(chord.chordName.input);
+        console.log(chord.chord.input);
         console.log(chord.harmonicFunctions);
       });
     }
@@ -90,19 +90,19 @@ export class ChordRomanAnalyzer {
         if (this.options.allHarmonicFunctions) {
           return (
             (this.options.showOriginalChords
-              ? chord.chordName.input + ' : '
+              ? chord.chord.input + ' : '
               : '') + chord.getHighestHarmonicFunctions().join()
           );
           // return chord.input + '[' + chord.getHarmonicFunctionsSorted().join() + ']'
           // return chord.getHighestHarmonicFunctions().join()
         }
-        return chord.getHarmonicFunction();
+        return chord.getBestHarmonicFunctionStr();
       }
-      return chord.chordName.romanNumeral;
+      return chord.chord.romanNumeral;
     });
   }
 
-  private updateWeights(chords: Chord[], secondPass = false): void {
+  private updateWeights(chords: ChordAnalysis[], secondPass = false): void {
     for (let i = 0; i < chords.length; i++) {
       const previous = i === 0 ? null : chords[i - 1];
       const next = i === chords.length - 1 ? null : chords[i + 1];
@@ -132,12 +132,15 @@ const a = new ChordRomanAnalyzer()
   .showFunctions(true)
   .showOriginalChords(true)
   .showAllHarmonicFunctions(false)
-  .showAnalysis(false);
+  .showAnalysis(true);
 
 // console.log(a.analyzeBars(std.girlFromIpanemaBars, 'F'));
-// console.log(a.analyzeBars(std.yourSteppedBars1, 'C'));
+console.log(a.analyzeBars(std.yourSteppedBars1, 'C'));
 // console.log(a.analyzeBars(std.iRememberYouBars, 'F'));
 // console.log(a.analyzeBars(std.stellaByStarlightBars, 'Bb'));
 // console.log(a.analyzeBars(std.illRememberAprilBars, 'G'));
 // console.log(a.analyzeBars(std.allTheThingsYouAreBars, 'Ab'));
-console.log(a.analyzeBars('|D D7 | G Bb | D', 'D'));
+// console.log(a.analyzeBars(std.theDaysOfWineAndRosesBars, 'F'));
+// console.log(a.analyzeBars(std.allOfMeBars, 'C'));
+// console.log(a.analyzeBars(std.haveYouMetMissJonesBars, 'G'));
+// console.log(a.analyzeBars('|D D7 | G Bb | D', 'D'));
