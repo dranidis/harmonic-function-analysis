@@ -45,3 +45,7 @@ export function distanceFromI(key: string): number {
 export function distanceFromIInMinor(key: string): number {
   return distanceFromIInCircle(key, minorKeyCircle);
 }
+
+export function toMinorKey(key: string) : string {
+  return key.toLowerCase();
+}

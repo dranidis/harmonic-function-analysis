@@ -150,7 +150,7 @@ const a = new ChordRomanAnalyzer()
   .showAllHarmonicFunctions(false)
   .showAnalysis(true);
 
-// console.log(a.analyzeBars(std.girlFromIpanemaBars, 'F'));
+console.log(a.analyzeBars(std.girlFromIpanemaBars, 'F'));
 // console.log(a.analyzeBars(std.yourSteppedBars1, 'C'));
 // console.log(a.analyzeBars(std.iRememberYouBars, 'F'));
 // console.log(a.analyzeBars(std.stellaByStarlightBars, 'Bb'));
@@ -160,5 +160,5 @@ const a = new ChordRomanAnalyzer()
 // console.log(a.analyzeBars(std.allOfMeBars, 'C'));
 // console.log(a.analyzeBars(std.afternoonInParisBars, 'C'));
 // console.log(a.analyzeBars(std.butBeautifulBars, 'G'));
-console.log(a.analyzeBars(std.haveYouMetMissJonesBars, 'G'));
+// console.log(a.analyzeBars(std.haveYouMetMissJonesBars, 'G'));
 // console.log(a.analyzeBars('|D D7 | G Bb | D', 'D'));

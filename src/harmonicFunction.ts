@@ -20,7 +20,8 @@ export class HarmonicFunction {
     if (this._position[0] === 'S' && this._key === 'I') {
       output = `V7/${this._position.slice(1)}`;
     } else if (this._position[0] === 'T' && this._key === 'I') {
-      output = `TT7/${this._position.slice(1)}`;
+      output = 'TT7'; 
+      // ${this._position.slice(1)}`;
     } else  {
       output = `${this._position}` + qualityToString(this.quality) + (this._key === 'I' ? '' : `/${this._key}`);
     }

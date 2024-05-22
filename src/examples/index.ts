@@ -62,7 +62,7 @@ illRememberAprilBars :
   '| Am7    | D7 | Gmaj7  | Am7 D7  ',
 
 girlFromIpanemaBars :
-  '| Fmaj7 | Fmaj7 | G7 | G7' +
+  '| Fmaj7 | Fmaj7 | G7 | ' +
   '| Gm7 | Gb7 | Fmaj7 | Gb7 ' +
   '| Fmaj7 | Fmaj7 | G7 | G7' +
   '| Gm7 | Gb7 | Fmaj7 |  ' +

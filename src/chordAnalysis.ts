@@ -1,6 +1,6 @@
 import { Chord, Quality } from './chord';
 import { HarmonicFunction } from './harmonicFunction';
-import { distanceFromI, distanceFromIInMinor } from './keys';
+import { distanceFromI, distanceFromIInMinor, toMinorKey } from './keys';
 import { newKey } from './roman';
 import { assertThat } from './util';
 
@@ -27,24 +27,25 @@ export class ChordAnalysis {
   }
 
   updateIIwithNextV(nextV: ChordAnalysis): void {
-    const bestPrev = this.getBestHarmonicFunction();
+    const bestFunction = this.getBestHarmonicFunction();
 
-    if (bestPrev.key === 'I') return;
+    // don't change the function of diatonic chords
+    if (bestFunction.key === 'I') return;
 
-    const bestCurrent = nextV.getBestHarmonicFunction();
-    const previousII = this.getHarmonicFunctionAtPositionAndKey(
+    const bestNextFunction = nextV.getBestHarmonicFunction();
+    const currentIIwithKeyOfNext = this.getHarmonicFunctionAtPositionAndKey(
       'ii',
-      bestCurrent.key,
+      bestNextFunction.key,
     );
 
-    if (previousII) {
-      previousII.weight *= 10;
+    if (currentIIwithKeyOfNext) {
+      currentIIwithKeyOfNext.weight *= 10;
     }
 
     if (this.chord.isHalfDiminished) {
       const nextVtoMinor = nextV.getHarmonicFunctionAtPositionAndKey(
         'V',
-        bestCurrent.key.toLowerCase(),
+        toMinorKey(bestNextFunction.key),
       );
       if (nextVtoMinor) {
         nextVtoMinor.weight *= 100;
