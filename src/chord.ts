@@ -75,6 +75,10 @@ export class Chord {
     return this.quality === Quality.m7;
   }
 
+  get isMinor(): boolean {
+    return this.isHalfDiminished || this.isMinor7;
+  }
+
   get isHalfDiminished(): boolean {
     return this.quality === Quality.m7b5;
   }
@@ -110,7 +114,7 @@ export class Chord {
    */
   export function getChordQuality(chordStr: string): Quality {
     const matchResult = chordStr.match(/maj7|m7b5|m7|dim7|o7|aug7|7|m/);
-    console.log('matchResult:', matchResult);
+    // console.log('matchResult:', matchResult);
    
     const quality = matchResult ? matchResult[0] : '';
 

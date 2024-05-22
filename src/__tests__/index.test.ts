@@ -1,8 +1,6 @@
-import {
-  ChordRomanAnalyzer,
-} from '../';
+import { ChordRomanAnalyzer } from '../';
 import { ENABLE_MIN_MODE_MIXTURE } from '../chordAnalysis';
-import { std }  from '../examples';
+import { std } from '../examples';
 import { getScale } from '../scale';
 
 describe('RomanAnalyzer', () => {
@@ -34,7 +32,6 @@ describe('RomanAnalyzer', () => {
       'vim7',
     ]);
   });
-
 
   test('chords with flats', () => {
     const romanAnalyzer = new ChordRomanAnalyzer();
@@ -102,7 +99,7 @@ describe('RomanAnalyzer', () => {
     romanAnalyzer.showFunctions(true);
     if (ENABLE_MIN_MODE_MIXTURE)
       expect(romanAnalyzer.analyze(['Ebmaj7'], 'C')).toEqual(['bIII']);
-  });  
+  });
 
   test('II7', () => {
     const romanAnalyzer = new ChordRomanAnalyzer();
@@ -179,8 +176,8 @@ describe('RomanAnalyzer', () => {
     romanAnalyzer.showFunctions(true);
     expect(romanAnalyzer.analyze(['F#m7b5', 'B7', 'Emaj7'], 'Ab')).toEqual([
       'iiø7/bvi',
-      'V7/bVI',
-      ENABLE_MIN_MODE_MIXTURE ? 'bVI': 'I/bVI'
+      'V7/bvi',
+      ENABLE_MIN_MODE_MIXTURE ? 'bVI' : 'I/bVI',
     ]);
   });
 
@@ -205,38 +202,62 @@ describe('RomanAnalyzer', () => {
   test('iiim7-V7/ii-iim7', () => {
     const romanAnalyzer = new ChordRomanAnalyzer().showAnalysis(true);
     romanAnalyzer.showFunctions(true);
-    expect(
-      romanAnalyzer.analyze(['Em7', 'A7', 'Dm7'], 'C'),
-    ).toEqual(['iiim7', 'V7/ii', 'iim7']);
+    expect(romanAnalyzer.analyze(['Em7', 'A7', 'Dm7'], 'C')).toEqual([
+      'iiim7',
+      'V7/ii',
+      'iim7',
+    ]);
   });
 
   test('vim7-V7/V-V7', () => {
     const romanAnalyzer = new ChordRomanAnalyzer().showAnalysis(true);
     romanAnalyzer.showFunctions(true);
-    expect(
-      romanAnalyzer.analyze(['Em7', 'A7', 'D7'], 'G'),
-    ).toEqual(['vim7', 'V7/V', 'V7',]);
+    expect(romanAnalyzer.analyze(['Em7', 'A7', 'D7'], 'G')).toEqual([
+      'vim7',
+      'V7/V',
+      'V7',
+    ]);
   });
 
   test('iiø7/vi V7/vi vim7', () => {
     const romanAnalyzer = new ChordRomanAnalyzer().showAnalysis(true);
     romanAnalyzer.showFunctions(true);
-    expect(
-      romanAnalyzer.analyze(['Em7b5', 'A7', 'Dm7'], 'F'),
-    ).toEqual(['iiø7/vi', 'V7/vi', 'vim7',]);
+    expect(romanAnalyzer.analyze(['Em7b5', 'A7', 'Dm7'], 'F')).toEqual([
+      'iiø7/vi',
+      'V7/vi',
+      'vim7',
+    ]);
   });
 
   test('ivm7-BD7/V I/V', () => {
     const romanAnalyzer = new ChordRomanAnalyzer().showAnalysis(true);
     romanAnalyzer.showFunctions(true);
-    expect(
-      romanAnalyzer.analyze(['Bbm7', 'Eb7', 'Fmaj7'], 'Bb'),
-    ).toEqual([ENABLE_MIN_MODE_MIXTURE ? 'im7': 'ivm7/V', 'BD7/V', 'I/V',]);
+    expect(romanAnalyzer.analyze(['Bbm7', 'Eb7', 'Fmaj7'], 'Bb')).toEqual([
+      ENABLE_MIN_MODE_MIXTURE ? 'im7' : 'ivm7/V',
+      'BD7/V',
+      'I/V',
+    ]);
   });
+
+  test('| Bbmaj7  | Em7 A7   | Dmaj7  in F', () => {
+    const romanAnalyzer = new ChordRomanAnalyzer().showAnalysis(true);
+    romanAnalyzer.showFunctions(true);
+    expect(
+      romanAnalyzer.analyze(['Bbmaj7', 'Em7', 'A7', 'Dmaj7'], 'F'),
+    ).toEqual(['IV', 'iim7/VI', 'V7/VI', 'I/VI']);
+  });
+
+  test('| Am7b5 D7 Gmaj7 in Abmaj7', () => {
+    const romanAnalyzer = new ChordRomanAnalyzer().showAnalysis(true);
+    romanAnalyzer.showFunctions(true);
+    expect(
+      romanAnalyzer.analyze(['Am7b5', 'D7', 'Gmaj7'], 'Ab'),
+    ).toEqual(['iiø7/vii', 'V7/vii', 'I/VII']);
+  });
+
 });
 
 describe('standards', () => {
-
   test('stella by starlight', () => {
     const romanAnalyzer = new ChordRomanAnalyzer();
     romanAnalyzer.showFunctions(true);
@@ -245,8 +266,6 @@ describe('standards', () => {
       .replace(/\|/g, '')
       .split(' ')
       .filter((chord) => chord !== '');
-    console.log('chords:', chords);
-    console.log(romanAnalyzer.analyze(chords, 'Bb'));
     expect(romanAnalyzer.analyze(chords, 'Bb')).toEqual([
       'iiø7/iii',
       'V7/iii',
@@ -276,8 +295,111 @@ describe('standards', () => {
       'iiø7/ii',
       'V7/ii',
       'iiø7/i',
+      'V7/i',
+      'I',
+    ]);
+  });
+
+  test('I remember you', () => {
+    const romanAnalyzer = new ChordRomanAnalyzer();
+    romanAnalyzer.showFunctions(true).showAnalysis(true);
+    // delete all '|' characters
+    const chords = std.iRememberYouBars
+      .replace(/\|/g, '')
+      .split(' ')
+      .filter((chord) => chord !== '');
+    console.log(romanAnalyzer.analyze(chords, 'F'));
+    expect(romanAnalyzer.analyze(chords, 'F')).toEqual([
+      'I',
+      'iiø7/iii',
+      'V7/iii',
+      'I',
+      'iim7/IV',
+      'V7/IV',
+      'IV',
+      'ivm7',
+      'BD7',
+      'I',
+      'iim7',
       'V7',
       'I',
+      'iiø7/iii',
+      'V7/iii',
+      'I',
+      'iim7/IV',
+      'V7/IV',
+      'IV',
+      'ivm7',
+      'BD7',
+      'I',
+      'iim7/IV',
+      'V7/IV',
+      'IV',
+      'iim7/VI',
+      'V7/VI',
+      'I/VI',
+      'iim7/VI',
+      'V7/VI',
+      'I/VI',
+      'vim7',
+      'V7/V',
+      'I/V',
+      'iim7',
+      'V7',
+      'I',
+      'iiø7/iii',
+      'V7/iii',
+      'I',
+      'iiø7/ii',
+      'V7/ii',
+      'iim7',
+      'ivm7',
+      'BD7',
+      'iiim7',
+      'V7/ii',
+      'iim7',
+      'V7',
+      'I',
+      'V7/ii',
+      'iim7',
+      'V7',
+    ]);
+  });
+
+  test('All of me', () => {
+    const romanAnalyzer = new ChordRomanAnalyzer();
+    romanAnalyzer.showFunctions(true).showAnalysis(true);
+    // delete all '|' characters
+    const chords = std.allOfMeBars
+      .replace(/\|/g, '')
+      .split(' ')
+      .filter((chord) => chord !== '');
+    console.log(romanAnalyzer.analyze(chords, 'C'));
+    expect(romanAnalyzer.analyze(chords, 'C')).toEqual([
+      'I',
+      'V7/vi',
+      'V7/ii',
+      'iim7',
+      'V7/vi',
+      'vim7',
+      'V7/V',
+      'iim7',
+      'V7',
+      'I',
+      'V7/vi',
+      'V7/ii',
+      'iim7',
+      'IV',
+      'ivm7',
+      'I',
+      'iiø7/ii',
+      'V7/ii',
+      'iim7',
+      'V7',
+      'I',
+      'viio7/iii',
+      'iim7',
+      'V7',
     ]);
   });
 
@@ -291,17 +413,75 @@ describe('standards', () => {
       .filter((chord) => chord !== '');
     console.log(romanAnalyzer.analyze(chords, 'F'));
     expect(romanAnalyzer.analyze(chords, 'F')).toEqual([
-      'I',        'BD7',     'V7/ii',
-      'iim7',     'ivm7',    'BD7',
-      'iiim7',    'vim7',    'iim7',
-      'V7',       'iiø7/vi', 'V7/vi',
-      'vim7',     'V7/V',    'iim7',
-      'V7',       'I',       'BD7',
-      'V7/ii',    'iim7',    'ivm7',
-      'BD7',      'iiim7',   'vim7',
-      'iiø7/iii', 'TT7/iii', 'iiim7',
-      'vim7',     'iim7',    'V7',
-      'I',        'iim7',    'V7'
+      'I',
+      'BD7',
+      'V7/ii',
+      'iim7',
+      'ivm7',
+      'BD7',
+      'iiim7',
+      'vim7',
+      'iim7',
+      'V7',
+      'iiø7/vi',
+      'V7/vi',
+      'vim7',
+      'V7/V',
+      'iim7',
+      'V7',
+      'I',
+      'BD7',
+      'V7/ii',
+      'iim7',
+      'ivm7',
+      'BD7',
+      'iiim7',
+      'vim7',
+      'iiø7/iii',
+      'TT7/iii',
+      'iiim7',
+      'vim7',
+      'iim7',
+      'V7',
+      'I',
+      'iim7',
+      'V7',
+    ]);
+  });
+
+  test('all of me', () => {
+    const romanAnalyzer = new ChordRomanAnalyzer();
+    romanAnalyzer.showFunctions(true);
+    const chords = std.allOfMeBars
+      .replace(/\|/g, '')
+      .split(' ')
+      .filter((chord) => chord !== '');
+    console.log(romanAnalyzer.analyze(chords, 'C'));
+    expect(romanAnalyzer.analyze(chords, 'C')).toEqual([
+      'I',
+      'V7/vi',
+      'V7/ii',
+      'iim7',
+      'V7/vi',
+      'vim7',
+      'V7/V',
+      'iim7',
+      'V7',
+      'I',
+      'V7/vi',
+      'V7/ii',
+      'iim7',
+      'IV',
+      'ivm7',
+      'I',
+      'iiø7/ii',
+      'V7/ii',
+      'iim7',
+      'V7',
+      'I',
+      'viio7/iii',
+      'iim7',
+      'V7',
     ]);
   });
 
@@ -339,4 +519,3 @@ describe('getScale', () => {
     expect(getScale('F')).toEqual(['F', 'G', 'A', 'Bb', 'C', 'D', 'E', 'F']);
   });
 });
-

@@ -1,6 +1,6 @@
 import { printBars, processBars } from './bars';
 import { ChordAnalysis } from './chordAnalysis';
-import { Chord } from './chord';
+import { Chord, Quality } from './chord';
 import { std } from './examples';
 import { getScale } from './scale';
 
@@ -70,10 +70,9 @@ export class ChordRomanAnalyzer {
       });
     }
 
-
-
     this.updateWeights(chords);
     this.updateWeights(chords, true);
+    this.agreeOnII_Vs(chords);
 
     if (this.options.showAnalysis) {
       chords.forEach((chord) => {
@@ -89,9 +88,8 @@ export class ChordRomanAnalyzer {
       if (this.options.showFunctions) {
         if (this.options.allHarmonicFunctions) {
           return (
-            (this.options.showOriginalChords
-              ? chord.chord.input + ' : '
-              : '') + chord.getHighestHarmonicFunctions().join()
+            (this.options.showOriginalChords ? chord.chord.input + ' : ' : '') +
+            chord.getHighestHarmonicFunctions().join()
           );
           // return chord.input + '[' + chord.getHarmonicFunctionsSorted().join() + ']'
           // return chord.getHighestHarmonicFunctions().join()
@@ -111,6 +109,24 @@ export class ChordRomanAnalyzer {
       } else {
         chords[i].updateWeights(previous, next);
       }
+    }
+  }
+
+  private agreeOnII_Vs(chords: ChordAnalysis[]): void {
+    for (let i = 0; i < chords.length; i++) {
+      const current = chords[i];
+      const previous = i === 0 ? null : chords[i - 1];
+      const next = i === chords.length - 1 ? null : chords[i + 1];
+
+      // console.log("a ii-V", previous?.chord, current.chord);
+
+        if (
+          previous &&
+          previous.chord.isMinor &&
+          current.chord.isDominant7
+        ) {
+          previous.updateIIwithNextV(current);
+        }
     }
   }
 
@@ -135,12 +151,14 @@ const a = new ChordRomanAnalyzer()
   .showAnalysis(true);
 
 // console.log(a.analyzeBars(std.girlFromIpanemaBars, 'F'));
-console.log(a.analyzeBars(std.yourSteppedBars1, 'C'));
+// console.log(a.analyzeBars(std.yourSteppedBars1, 'C'));
 // console.log(a.analyzeBars(std.iRememberYouBars, 'F'));
 // console.log(a.analyzeBars(std.stellaByStarlightBars, 'Bb'));
 // console.log(a.analyzeBars(std.illRememberAprilBars, 'G'));
 // console.log(a.analyzeBars(std.allTheThingsYouAreBars, 'Ab'));
 // console.log(a.analyzeBars(std.theDaysOfWineAndRosesBars, 'F'));
 // console.log(a.analyzeBars(std.allOfMeBars, 'C'));
-// console.log(a.analyzeBars(std.haveYouMetMissJonesBars, 'G'));
+// console.log(a.analyzeBars(std.afternoonInParisBars, 'C'));
+// console.log(a.analyzeBars(std.butBeautifulBars, 'G'));
+console.log(a.analyzeBars(std.haveYouMetMissJonesBars, 'G'));
 // console.log(a.analyzeBars('|D D7 | G Bb | D', 'D'));

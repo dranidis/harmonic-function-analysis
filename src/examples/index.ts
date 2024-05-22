@@ -84,10 +84,10 @@ girlFromIpanemaBars :
   '| Am7 Dm7  | Gm7 C7 | Fmaj7 | Gm7 C7 ',
 
   allOfMeBars:
-  '| Cmaj7 |     | E7         |    | A7  |    | Dm7 |    ' +
-  '| E7    |     | Am7        |    | D7  |    | Dm7 | G7 ' +
-  '| Cmaj7 |     | E7         |    | A7  |    | Dm7 |    ' +
-  '| Fmaj7 | Fm7 | Cmaj7  Em7 | A7 | Dm7 | G7 | Cmaj7 Ebo7 | Dm7 G7 ',
+  '| Cmaj7 |     | E7          |    | A7  |    | Dm7        |    ' +
+  '| E7    |     | Am7         |    | D7  |    | Dm7        | G7 ' +
+  '| Cmaj7 |     | E7          |    | A7  |    | Dm7        |    ' +
+  '| Fmaj7 | Fm7 | Cmaj7 Em7b5 | A7 | Dm7 | G7 | Cmaj7 Ebo7 | Dm7 G7 ',
 
   haveYouMetMissJonesBars:
   '| Gmaj7 | G#o7 | Am7 | D7 ' +
@@ -99,6 +99,21 @@ girlFromIpanemaBars :
   '| Gmaj7 | G#o7 | Am7 | D7 C7' +
   '| Bm7 E7 | Am7 D7 | Gmaj7 | Am7 D7',
 
+  afternoonInParisBars:
+  '| Cmaj7 | Cm7 F7 | Bbmaj7 | Bbm7 Eb7 ' +
+  '| Abmaj7 | Dm7 G7 | Cmaj7 | Dm7 G7 ' +
+  '| Cmaj7 | Cm7 F7 | Bbmaj7 | Bbm7 Eb7 ' +
+  '| Abmaj7 | Dm7 G7 | Cmaj7 | ' +
+  '| Dm7 | G7 | Cmaj7 | A7 ' +
+  '| Dm7 | G7 | Cmaj7 | Dm7 G7 ' +
+  '| Cmaj7 | Cm7 F7 | Bbmaj7 | Bbm7 Eb7 ' +
+  '| Abmaj7 | Dm7 G7 | Cmaj7 | Dm7 G7 ', 
+
+  butBeautifulBars: // chords use maj6 and min6, revisit to fix them
+  '| Gmaj7 | Bm7b5 E7 | Am7 | C#m7b5 F#7 ' + // actually starts with G6
+  '| Gmaj7 | Bm7b5 E7 | A7 |  ' + // again G6
+  '| D7    | Bm7 Em7 | Am7 D7 | Gmaj7  ' +
+  '| Em7 | A7 | Am7 | D7 ', // actually Em Em(maj7) Em7 | A7 | Am7/D | D7
 };
 
 

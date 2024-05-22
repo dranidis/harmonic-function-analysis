@@ -8,7 +8,7 @@ const KEY_WEIGHT_DIVIDER = 10; //10;
 const MINOR_KEY_WEIGHT_SUBTRACT = 0.0;
 const FROM_NEXT_NEIGHBOR_UPDATE_FACTOR = 0.0;
 const FROM_PREV_NEIGHBOR_UPDATE_FACTOR = 0.0;
-export const II_V_UPDATE_FACTOR = 1;//4;
+export const II_V_UPDATE_FACTOR = 1; //4;
 export const V_I_UPDATE_FACTOR = 10; //5;
 
 const ENABLE_SEC_DOM = false;
@@ -26,7 +26,44 @@ export class ChordAnalysis {
     this.analyzeRomanQuality();
   }
 
-  getBestHarmonicFunction() : HarmonicFunction {
+  updateIIwithNextV(nextV: ChordAnalysis): void {
+    const bestPrev = this.getBestHarmonicFunction();
+
+    if (bestPrev.key === 'I') return;
+
+    const bestCurrent = nextV.getBestHarmonicFunction();
+    const previousII = this.getHarmonicFunctionAtPositionAndKey(
+      'ii',
+      bestCurrent.key,
+    );
+
+    if (previousII) {
+      previousII.weight *= 10;
+    }
+
+    if (this.chord.isHalfDiminished) {
+      const nextVtoMinor = nextV.getHarmonicFunctionAtPositionAndKey(
+        'V',
+        bestCurrent.key.toLowerCase(),
+      );
+      if (nextVtoMinor) {
+        nextVtoMinor.weight *= 100;
+      }
+    }
+  }
+
+  getHarmonicFunctionAtPositionAndKey(
+    position: string,
+    key: string,
+  ): HarmonicFunction | undefined {
+    for (const hf of this.harmonicFunctions) {
+      if (hf.position === position && hf.key === key) {
+        return hf;
+      }
+    }
+  }
+
+  getBestHarmonicFunction(): HarmonicFunction {
     return this.getHarmonicFunctionsSorted()[0];
   }
 
@@ -54,7 +91,10 @@ export class ChordAnalysis {
     return this.harmonicFunctions.map((hf) => hf.toString());
   }
 
-  updateWeights(previous: ChordAnalysis | null, next: ChordAnalysis | null): void {
+  updateWeights(
+    previous: ChordAnalysis | null,
+    next: ChordAnalysis | null,
+  ): void {
     if (previous) {
       this.updateWeightsHelper(previous, FROM_PREV_NEIGHBOR_UPDATE_FACTOR);
       this.updateVI(previous);
@@ -64,7 +104,10 @@ export class ChordAnalysis {
     }
   }
 
-  updateWeights2(previous: ChordAnalysis | null, next: ChordAnalysis | null): void {
+  updateWeights2(
+    previous: ChordAnalysis | null,
+    next: ChordAnalysis | null,
+  ): void {
     if (previous) {
       // console.log('KEY', this.chord.input, this.getBestHarmonicFunction(), this.harmonicFunctions)
       this.updateWeightsHelper(previous, FROM_PREV_NEIGHBOR_UPDATE_FACTOR);
@@ -90,20 +133,21 @@ export class ChordAnalysis {
       for (const harmonicFunction of this.harmonicFunctions) {
         if (prevHarmonicFunction.key === harmonicFunction.key) {
           if (
+            // prevHarmonicFunction.key != "II" && prevHarmonicFunction.key != "V" &&
             prevHarmonicFunction.position === 'ii' &&
             harmonicFunction.position === 'V'
           ) {
-            harmonicFunction.weight *= II_V_UPDATE_FACTOR;
+            // harmonicFunction.weight *= II_V_UPDATE_FACTOR;
             prevHarmonicFunction.weight *= II_V_UPDATE_FACTOR;
           }
 
-          if (
-            prevHarmonicFunction.position === 'tt' &&
-            harmonicFunction.position === 'TT'
-          ) {
-            harmonicFunction.weight *= II_V_UPDATE_FACTOR;
-            prevHarmonicFunction.weight *= II_V_UPDATE_FACTOR;
-          }
+          // if (
+          //   prevHarmonicFunction.position === 'tt' &&
+          //   harmonicFunction.position === 'TT'
+          // ) {
+          //   harmonicFunction.weight *= II_V_UPDATE_FACTOR;
+          //   prevHarmonicFunction.weight *= II_V_UPDATE_FACTOR;
+          // }
 
           if (
             prevHarmonicFunction.position === 'iv' &&
@@ -221,8 +265,7 @@ export class ChordAnalysis {
     }
 
     if (this.chord.isDominant7) {
-
-            // secondary dominants
+      // secondary dominants
       // tests break
       if (ENABLE_SEC_DOM) {
         this.addHarmonicFunctionHelper('SV', Quality.dom7, -2);
@@ -246,8 +289,6 @@ export class ChordAnalysis {
         this.addHarmonicFunctionHelper('TT', Quality.dom7, -1);
         this.addMinorHarmonicFunctionHelper('TT', Quality.dom7, -1);
       }
-
-
     }
 
     if (this.chord.isMinor7) {
