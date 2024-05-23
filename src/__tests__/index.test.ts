@@ -247,13 +247,29 @@ describe('RomanAnalyzer', () => {
     ).toEqual(['IV', 'iim7/VI', 'V7/VI', 'I/VI']);
   });
 
-  test('| Am7b5 D7 Gmaj7 in Abmaj7', () => {
+  test('Am7b5 D7 Gmaj7 in Abmaj7', () => {
     const romanAnalyzer = new ChordRomanAnalyzer().showAnalysis(true);
     romanAnalyzer.showFunctions(true);
     expect(
       romanAnalyzer.analyze(['Am7b5', 'D7', 'Gmaj7'], 'Ab'),
     ).toEqual(['iiø7/vii', 'V7/vii', 'I/VII']);
   });
+
+  test("Cm7 F7 Bbmaj7 in Gmaj7 (I'll remember April)", () => {
+    const romanAnalyzer = new ChordRomanAnalyzer().showAnalysis(true);
+    romanAnalyzer.showFunctions(true);
+    expect(
+      romanAnalyzer.analyze(['Cm7', 'F7', 'Bbmaj7'], 'G'),
+    ).toEqual(['iim7/bIII', 'V7/bIII', 'I/bIII']);
+  });  
+
+  test("G7 Cm7 F7 Bbmaj7 in Gmaj7 (I'll remember April)", () => {
+    const romanAnalyzer = new ChordRomanAnalyzer().showAnalysis(true);
+    romanAnalyzer.showFunctions(true);
+    expect(
+      romanAnalyzer.analyze(['G7', 'Cm7', 'F7', 'Bbmaj7'], 'G'),
+    ).toEqual(['V7/iv', 'iim7/bIII', 'V7/bIII', 'I/bIII']);
+  });  
 
 });
 

@@ -114,6 +114,18 @@ girlFromIpanemaBars :
   '| Gmaj7 | Bm7b5 E7 | A7 |  ' + // again G6
   '| D7    | Bm7 Em7 | Am7 D7 | Gmaj7  ' +
   '| Em7 | A7 | Am7 | D7 ', // actually Em Em(maj7) Em7 | A7 | Am7/D | D7
+
+  someDayMyPrinceWillComeBars:
+  '| Bbmaj7 | D7 | Ebmaj7 | G7 ' +
+  '| Cm7 | G7 | C7 | F7 ' +
+  '| Dm7 | C#o7 | Cm7 | F7 ' +
+  '| Dm7 | C#o7 | Cm7 | F7 ' +
+  '| Bbmaj7 | D7 | Ebmaj7 | G7 ' +
+  '| Cm7 | G7 | C7 | F7 ' +
+  '| Fm7 | Bb7 | Ebmaj7 | Eo7 ' +
+  '| Bbmaj7 | Cm7 F7 | Bbmaj7 |  ',
+
+
 };
 
 

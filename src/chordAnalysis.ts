@@ -8,8 +8,10 @@ const KEY_WEIGHT_DIVIDER = 10; //10;
 const MINOR_KEY_WEIGHT_SUBTRACT = 0.0;
 const FROM_NEXT_NEIGHBOR_UPDATE_FACTOR = 0.0;
 const FROM_PREV_NEIGHBOR_UPDATE_FACTOR = 0.0;
-export const II_V_UPDATE_FACTOR = 1; //4;
-export const V_I_UPDATE_FACTOR = 10; //5;
+const II_V_UPDATE_FACTOR_ii = 10; //4;
+const V_I_UPDATE_FACTOR_V = 10; //5;
+const V_I_UPDATE_FACTOR_I = 4; //5;
+const II_V_UPDATE_TO_MINOR_V_due_to_dim_ii = 35;
 
 const ENABLE_SEC_DOM = false;
 const ENABLE_TT = true;
@@ -27,19 +29,21 @@ export class ChordAnalysis {
   }
 
   updateIIwithNextV(nextV: ChordAnalysis): void {
+    
     const bestFunction = this.getBestHarmonicFunction();
 
     // don't change the function of diatonic chords
-    if (bestFunction.key === 'I') return;
+    if (bestFunction.isDiatonic) return;
 
     const bestNextFunction = nextV.getBestHarmonicFunction();
+
     const currentIIwithKeyOfNext = this.getHarmonicFunctionAtPositionAndKey(
-      'ii',
+      bestNextFunction.position === 'BD'? 'iv' :'ii', // the ii of a BD is a iv
       bestNextFunction.key,
     );
 
     if (currentIIwithKeyOfNext) {
-      currentIIwithKeyOfNext.weight *= 10;
+      currentIIwithKeyOfNext.weight *= II_V_UPDATE_FACTOR_ii;
     }
 
     if (this.chord.isHalfDiminished) {
@@ -48,7 +52,7 @@ export class ChordAnalysis {
         toMinorKey(bestNextFunction.key),
       );
       if (nextVtoMinor) {
-        nextVtoMinor.weight *= 100;
+        nextVtoMinor.weight *= II_V_UPDATE_TO_MINOR_V_due_to_dim_ii;
       }
     }
   }
@@ -105,20 +109,6 @@ export class ChordAnalysis {
     }
   }
 
-  updateWeights2(
-    previous: ChordAnalysis | null,
-    next: ChordAnalysis | null,
-  ): void {
-    if (previous) {
-      // console.log('KEY', this.chord.input, this.getBestHarmonicFunction(), this.harmonicFunctions)
-      this.updateWeightsHelper(previous, FROM_PREV_NEIGHBOR_UPDATE_FACTOR);
-      this.updateiiV(previous);
-    }
-    if (next) {
-      this.updateWeightsHelper(next, FROM_NEXT_NEIGHBOR_UPDATE_FACTOR);
-    }
-  }
-
   showFunctions(): void {
     console.log(this.chord.input);
     const f = this.getHarmonicFunctionsSorted().reduce(
@@ -127,39 +117,6 @@ export class ChordAnalysis {
     );
 
     console.log(f);
-  }
-
-  private updateiiV(previous: ChordAnalysis): void {
-    for (const prevHarmonicFunction of previous.harmonicFunctions) {
-      for (const harmonicFunction of this.harmonicFunctions) {
-        if (prevHarmonicFunction.key === harmonicFunction.key) {
-          if (
-            // prevHarmonicFunction.key != "II" && prevHarmonicFunction.key != "V" &&
-            prevHarmonicFunction.position === 'ii' &&
-            harmonicFunction.position === 'V'
-          ) {
-            // harmonicFunction.weight *= II_V_UPDATE_FACTOR;
-            prevHarmonicFunction.weight *= II_V_UPDATE_FACTOR;
-          }
-
-          // if (
-          //   prevHarmonicFunction.position === 'tt' &&
-          //   harmonicFunction.position === 'TT'
-          // ) {
-          //   harmonicFunction.weight *= II_V_UPDATE_FACTOR;
-          //   prevHarmonicFunction.weight *= II_V_UPDATE_FACTOR;
-          // }
-
-          if (
-            prevHarmonicFunction.position === 'iv' &&
-            harmonicFunction.position === 'BD'
-          ) {
-            harmonicFunction.weight *= II_V_UPDATE_FACTOR;
-            prevHarmonicFunction.weight *= II_V_UPDATE_FACTOR;
-          }
-        }
-      }
-    }
   }
 
   private updateVI(previous: ChordAnalysis): void {
@@ -171,8 +128,9 @@ export class ChordAnalysis {
           prevHarmonicFunction.key === harmonicFunction.position &&
           harmonicFunction.key === 'I'
         ) {
-          harmonicFunction.weight *= V_I_UPDATE_FACTOR;
-          prevHarmonicFunction.weight *= V_I_UPDATE_FACTOR;
+          // console.log("sec V-I", previous.chord.input, prevHarmonicFunction, this.chord.input, harmonicFunction);
+          harmonicFunction.weight *= V_I_UPDATE_FACTOR_I;
+          prevHarmonicFunction.weight *= V_I_UPDATE_FACTOR_V;
         }
         // ordinary dominants
         else if (
@@ -180,8 +138,9 @@ export class ChordAnalysis {
           ['V', 'TT', 'BD'].includes(prevHarmonicFunction.position) &&
           harmonicFunction.position === 'I'
         ) {
-          harmonicFunction.weight *= V_I_UPDATE_FACTOR;
-          prevHarmonicFunction.weight *= V_I_UPDATE_FACTOR;
+          // console.log("V-I", previous.chord.input, prevHarmonicFunction, this.chord.input, harmonicFunction);
+          harmonicFunction.weight *= V_I_UPDATE_FACTOR_I;
+          prevHarmonicFunction.weight *= V_I_UPDATE_FACTOR_V;
         }
       }
     }
@@ -297,12 +256,14 @@ export class ChordAnalysis {
       this.addHarmonicFunctionHelper('iii', Quality.m7, -4);
       this.addHarmonicFunctionHelper('vi', Quality.m7, -9);
       this.addHarmonicFunctionHelper('iv', Quality.m7, -5);
+
+      this.addHarmonicFunctionHelper('i', Quality.m7, 0);
+
       if (ENABLE_TT) {
         this.addHarmonicFunctionHelper('tt', Quality.m7, -8);
       }
-      if (ENABLE_MIN_MODE_MIXTURE) {
-        this.addHarmonicFunctionHelper('i', Quality.m7, 0);
-      }
+      // if (ENABLE_MIN_MODE_MIXTURE) {
+      // }
       // this.addMinorHarmonicFunctionHelper('i', Quality.m7, 0); // minor
     }
 

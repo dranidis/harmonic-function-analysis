@@ -44,5 +44,8 @@ export class HarmonicFunction {
   get position(): string {
     return this._position;
   }
-  
+
+  get isDiatonic(): boolean {
+    return this._key === 'I' && this._position !== 'iv' && this._position !== 'i';
+  }
 }
