@@ -72,6 +72,7 @@ export class ChordRomanAnalyzer {
 
     this.updateWeights(chords);
     this.agreeOnII_Vs(chords);
+    this.identifyChangeOfKey(chords);
 
     if (this.options.showAnalysis) {
       chords.forEach((chord) => {
@@ -90,8 +91,6 @@ export class ChordRomanAnalyzer {
             (this.options.showOriginalChords ? chord.chord.input + ' : ' : '') +
             chord.getHighestHarmonicFunctions().join()
           );
-          // return chord.input + '[' + chord.getHarmonicFunctionsSorted().join() + ']'
-          // return chord.getHighestHarmonicFunctions().join()
         }
         return chord.getBestHarmonicFunctionStr();
       }
@@ -122,6 +121,19 @@ export class ChordRomanAnalyzer {
     }
   }
 
+  private identifyChangeOfKey(chords: ChordAnalysis[]): void {
+    for (let i = 0; i < chords.length; i++) {
+      const current = chords[i];
+      const previous = i === 0 ? null : chords[i - 1];
+      const next: ChordAnalysis | null = i === chords.length - 1 ? null : chords[i + 1];
+        if (
+          previous && next
+        ) {
+          current.updateKeyChanges(previous, next);
+        }
+    }
+  }
+
   analyzeBars(input: string, key: string): string {
     const chordsInBars = processBars(input);
     // console.log(chords);
@@ -146,7 +158,7 @@ const a = new ChordRomanAnalyzer()
 // console.log(a.analyzeBars(std.yourSteppedBars1, 'C'));
 // console.log(a.analyzeBars(std.iRememberYouBars, 'F'));
 // console.log(a.analyzeBars(std.stellaByStarlightBars, 'Bb'));
-console.log(a.analyzeBars(std.illRememberAprilBars, 'G'));
+// console.log(a.analyzeBars(std.illRememberAprilBars, 'G'));
 // console.log(a.analyzeBars(std.allTheThingsYouAreBars, 'Ab'));
 // console.log(a.analyzeBars(std.theDaysOfWineAndRosesBars, 'F'));
 // console.log(a.analyzeBars(std.allOfMeBars, 'C'));

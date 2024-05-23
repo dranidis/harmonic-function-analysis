@@ -74,13 +74,13 @@ girlFromIpanemaBars :
   '| Gm7 | Gb7 | Fmaj7 | Gb7 ',
 
   theDaysOfWineAndRosesBars :
-  '| Fmaj7    | Eb7    | D7    | ' +
+  '| Fmaj7    | Eb7    | Am7   | D7 ' +
   '| Gm7      |        | Bbm7  | Eb7 ' +
   '| Am7      | Dm7    | Gm7   | C7 ' +
   '| Em7b5 A7 | Dm7 G7 | Gm7   | C7 ' +
-  '| Fmaj7    | Eb7    | D7    | ' +
+  '| Fmaj7    | Eb7    | Am7   | D7  ' +
   '| Gm7      |        | Bbm7  | Eb7 ' +
-  '| Am7      | Dm7    | Bm7b5  | Bb7 ' +
+  '| Am7      | Dm7    | Bm7b5 | Bb7 ' +
   '| Am7 Dm7  | Gm7 C7 | Fmaj7 | Gm7 C7 ',
 
   allOfMeBars:

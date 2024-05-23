@@ -271,6 +271,14 @@ describe('RomanAnalyzer', () => {
     ).toEqual(['V7/iv', 'iim7/bIII', 'V7/bIII', 'I/bIII']);
   });  
 
+  test('do not use a diatonic chord within a change of key Remember April', () => {
+    const romanAnalyzer = new ChordRomanAnalyzer().showAnalysis(true);
+    romanAnalyzer.showFunctions(true);
+    expect(
+      romanAnalyzer.analyze(['F7', 'Bbmaj7', 'Gm7', 'Cm7', 'F7', 'Bbmaj7'], 'G'),
+    ).toEqual(['V7/bIII', 'I/bIII', 'vim7/bIII', 'iim7/bIII', 'V7/bIII', 'I/bIII']);
+  });
+
 });
 
 describe('standards', () => {
@@ -431,6 +439,7 @@ describe('standards', () => {
     expect(romanAnalyzer.analyze(chords, 'F')).toEqual([
       'I',
       'BD7',
+      'iiim7',
       'V7/ii',
       'iim7',
       'ivm7',
@@ -447,6 +456,7 @@ describe('standards', () => {
       'V7',
       'I',
       'BD7',
+      'iiim7',
       'V7/ii',
       'iim7',
       'ivm7',

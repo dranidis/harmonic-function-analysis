@@ -12,12 +12,14 @@ const II_V_UPDATE_FACTOR_ii = 10; //4;
 const V_I_UPDATE_FACTOR_V = 10; //5;
 const V_I_UPDATE_FACTOR_I = 4; //5;
 const II_V_UPDATE_TO_MINOR_V_due_to_dim_ii = 35;
+const KEY_CHANGE_UPDATE_FACTOR = 2;
 
 const ENABLE_SEC_DOM = false;
 const ENABLE_TT = true;
 export const ENABLE_MIN_MODE_MIXTURE = false;
 
 export class ChordAnalysis {
+
   chord: Chord;
   harmonicFunctions: HarmonicFunction[] = [];
   scaleIndex = 0;
@@ -26,6 +28,27 @@ export class ChordAnalysis {
     this.chord = chord;
     this.scaleIndex = this.chord.getScaleIndex(scale);
     this.analyzeRomanQuality();
+  }
+
+  updateKeyChanges(previous: ChordAnalysis, next: ChordAnalysis) :void  {
+    const previousKey = previous.getBestHarmonicFunction().key;
+    const nextKey = next.getBestHarmonicFunction().key;
+    if (previousKey === nextKey) {
+      if (this.getBestHarmonicFunction().key !== previousKey) {
+        const functionToUpdate = this.getHarmonicFunctionAtKey(previousKey);
+        if (functionToUpdate) {
+          functionToUpdate.weight += KEY_CHANGE_UPDATE_FACTOR;
+        }
+      }
+    }
+  }
+
+  private getHarmonicFunctionAtKey(key: string): HarmonicFunction | undefined {
+    for (const hf of this.harmonicFunctions) {
+      if (hf.key === key) {
+        return hf;
+      }
+    }
   }
 
   updateIIwithNextV(nextV: ChordAnalysis): void {
