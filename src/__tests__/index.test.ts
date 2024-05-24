@@ -1,6 +1,6 @@
 import { ChordRomanAnalyzer } from '../';
 import { ENABLE_MIN_MODE_MIXTURE } from '../chordAnalysis';
-import { std } from '../examples';
+import { standards } from '../examples';
 import { getScale } from '../scale';
 
 describe('RomanAnalyzer', () => {
@@ -286,7 +286,7 @@ describe('standards', () => {
     const romanAnalyzer = new ChordRomanAnalyzer();
     romanAnalyzer.showFunctions(true);
     // delete all '|' characters
-    const chords = std.stellaByStarlightBars
+    const chords = standards.stellaByStarlightBars
       .replace(/\|/g, '')
       .split(' ')
       .filter((chord) => chord !== '');
@@ -328,7 +328,7 @@ describe('standards', () => {
     const romanAnalyzer = new ChordRomanAnalyzer();
     romanAnalyzer.showFunctions(true).showAnalysis(true);
     // delete all '|' characters
-    const chords = std.iRememberYouBars
+    const chords = standards.iRememberYouBars
       .replace(/\|/g, '')
       .split(' ')
       .filter((chord) => chord !== '');
@@ -394,7 +394,7 @@ describe('standards', () => {
     const romanAnalyzer = new ChordRomanAnalyzer();
     romanAnalyzer.showFunctions(true).showAnalysis(true);
     // delete all '|' characters
-    const chords = std.allOfMeBars
+    const chords = standards.allOfMeBars
       .replace(/\|/g, '')
       .split(' ')
       .filter((chord) => chord !== '');
@@ -431,7 +431,7 @@ describe('standards', () => {
     const romanAnalyzer = new ChordRomanAnalyzer();
     romanAnalyzer.showFunctions(true);
     // delete all '|' characters
-    const chords = std.theDaysOfWineAndRosesBars
+    const chords = standards.theDaysOfWineAndRosesBars
       .replace(/\|/g, '')
       .split(' ')
       .filter((chord) => chord !== '');
@@ -464,7 +464,7 @@ describe('standards', () => {
       'iiim7',
       'vim7',
       'iiø7/iii',
-      'TT7/iii',
+      'V7/iii',
       'iiim7',
       'vim7',
       'iim7',
@@ -478,7 +478,7 @@ describe('standards', () => {
   test('all of me', () => {
     const romanAnalyzer = new ChordRomanAnalyzer();
     romanAnalyzer.showFunctions(true);
-    const chords = std.allOfMeBars
+    const chords = standards.allOfMeBars
       .replace(/\|/g, '')
       .split(' ')
       .filter((chord) => chord !== '');
@@ -515,7 +515,7 @@ describe('standards', () => {
     const romanAnalyzer = new ChordRomanAnalyzer();
     romanAnalyzer.showFunctions(true);
     // delete all '|' characters
-    const chords = std.yourSteppedBars1
+    const chords = standards.yourSteppedBars1
       .replace(/\|/g, '')
       .split(' ')
       .filter((chord) => chord !== '')

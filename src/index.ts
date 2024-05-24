@@ -1,7 +1,7 @@
 import { printBars, processBars } from './bars';
 import { ChordAnalysis } from './chordAnalysis';
 import { Chord } from './chord';
-import { std } from './examples';
+import { standards } from './examples';
 import { getScale } from './scale';
 
 export class ChordRomanAnalyzer {
@@ -166,4 +166,5 @@ const a = new ChordRomanAnalyzer()
 // console.log(a.analyzeBars(std.butBeautifulBars, 'G'));
 // console.log(a.analyzeBars(std.haveYouMetMissJonesBars, 'G'));
 // console.log(a.analyzeBars(std.someDayMyPrinceWillComeBars, 'Bb'));
+console.log(a.analyzeBars(standards.howInsensitiveBars, 'Bb'));
 // console.log(a.analyzeBars('|D D7 | G Bb | D', 'D'));
