@@ -2,12 +2,12 @@ class ChordInBar {
   chord: string;
   analyzedChord = '';
   bar: number;
-  position: number;
+  degree: number;
 
-  constructor(chord: string, bar: number, position: number) {
+  constructor(chord: string, bar: number, degree: number) {
     this.chord = chord;
     this.bar = bar;
-    this.position = position;
+    this.degree = degree;
   }
 }
 
