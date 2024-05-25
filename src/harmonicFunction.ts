@@ -6,7 +6,7 @@ const KEY_WEIGHT_DIVIDER = 10; //10;
 const MINOR_KEY_WEIGHT_SUBTRACT = 0.0;
 const ENABLE_SEC_DOM = false;
 const ENABLE_TT = true;
-const ENABLE_MIN_MODE_MIXTURE = false;
+export const ENABLE_MIN_MODE_MIXTURE = false;
 
 export const minorIV_degree = 'iv';
 export const minorII_degree = 'ii';
@@ -111,6 +111,7 @@ export function harmonicFuctionsForDominants(
   functions.push(
     makeHarmonicFunction('V', Quality.dom7, -7, scaleIndex),
     makeMinorHarmonicFunction('V', Quality.dom7, -7, scaleIndex),
+    // parallel minor key chords
     makeHarmonicFunction('BD', Quality.dom7, +2, scaleIndex),
   );
 
@@ -151,6 +152,7 @@ export function harmonicFunctionsForMinor(
     makeHarmonicFunction('ii', Quality.m7, -2, scaleIndex),
     makeHarmonicFunction('iii', Quality.m7, -4, scaleIndex),
     makeHarmonicFunction('vi', Quality.m7, -9, scaleIndex),
+    // some parallel minor key chords
     makeHarmonicFunction('iv', Quality.m7, -5, scaleIndex),
     makeHarmonicFunction('i', Quality.m7, 0, scaleIndex),
   );
@@ -169,7 +171,7 @@ export function harmonicFunctionsForHalfDiminished(
 ): HarmonicFunction[] {
   return [
     makeMinorHarmonicFunction('ii', Quality.m7b5, -2, scaleIndex),
-    // makeHarmonicFunction('vii', Quality.m7b5, 1, scaleIndex),
+    makeHarmonicFunction('vii', Quality.m7b5, 1, scaleIndex),
   ];
 }
 

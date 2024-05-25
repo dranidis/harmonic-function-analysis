@@ -1,6 +1,6 @@
 import { ChordRomanAnalyzer } from '../';
-import { ENABLE_MIN_MODE_MIXTURE } from '../chordAnalysis';
 import { standards } from '../examples';
+import { ENABLE_MIN_MODE_MIXTURE } from '../harmonicFunction';
 import { getScale } from '../scale';
 
 describe('RomanAnalyzer', () => {
