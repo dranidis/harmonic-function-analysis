@@ -1,4 +1,4 @@
-import { printBars, processBars } from './bars';
+import { printBars, processBars, readChordsFromFile } from './bars';
 import { ChordAnalysis } from './chordAnalysis';
 import { Chord } from './chord';
 import { standards } from './examples';
@@ -150,21 +150,25 @@ export class ChordRomanAnalyzer {
 
 const a = new ChordRomanAnalyzer()
   .showFunctions(true)
-  .showOriginalChords(true)
+  .showOriginalChords(false)
   .showAllHarmonicFunctions(false)
   .showAnalysis(true);
 
-// console.log(a.analyzeBars(std.girlFromIpanemaBars, 'F')); // problems in B section
-// console.log(a.analyzeBars(std.yourSteppedBars1, 'C'));
-// console.log(a.analyzeBars(std.iRememberYouBars, 'F'));
-// console.log(a.analyzeBars(std.stellaByStarlightBars, 'Bb'));
-// console.log(a.analyzeBars(std.illRememberAprilBars, 'G'));
-// console.log(a.analyzeBars(std.allTheThingsYouAreBars, 'Ab'));
-// console.log(a.analyzeBars(std.theDaysOfWineAndRosesBars, 'F'));
-// console.log(a.analyzeBars(std.allOfMeBars, 'C'));
-// console.log(a.analyzeBars(std.afternoonInParisBars, 'C'));
-// console.log(a.analyzeBars(std.butBeautifulBars, 'G'));
-// console.log(a.analyzeBars(std.haveYouMetMissJonesBars, 'G'));
-// console.log(a.analyzeBars(std.someDayMyPrinceWillComeBars, 'Bb'));
-console.log(a.analyzeBars(standards.howInsensitiveBars, 'Bb'));
+// console.log(a.analyzeBars(standards.girlFromIpanemaBars, 'F')); // problems in B section
+// console.log(a.analyzeBars(standards.yourSteppedBars1, 'C'));
+// console.log(a.analyzeBars(standards.iRememberYouBars, 'F'));
+// console.log(a.analyzeBars(standards.stellaByStarlightBars, 'Bb'));
+// console.log(a.analyzeBars(standards.illRememberAprilBars, 'G'));
+// console.log(a.analyzeBars(standards.allTheThingsYouAreBars, 'Ab'));
+// console.log(a.analyzeBars(standards.theDaysOfWineAndRosesBars, 'F'));
+// console.log(a.analyzeBars(standards.allOfMeBars, 'C'));
+// console.log(a.analyzeBars(standards.afternoonInParisBars, 'C'));
+// console.log(a.analyzeBars(standards.butBeautifulBars, 'G'));
+// console.log(a.analyzeBars(standards.haveYouMetMissJonesBars, 'G'));
+// console.log(a.analyzeBars(standards.someDayMyPrinceWillComeBars, 'Bb'));
+// console.log(a.analyzeBars(standards.howInsensitiveBars, 'Bb'));
 // console.log(a.analyzeBars('|D D7 | G Bb | D', 'D'));
+
+// console.log(a.analyzeBars(readChordsFromFile('src/examples/standards/WhatIsThisThingCalledLove.txt'), 'C'));
+// console.log(a.analyzeBars(readChordsFromFile('src/examples/standards/SomedayMyPrinceWillCome.txt'), 'Bb'));
+console.log(a.analyzeBars(readChordsFromFile('src/examples/standards/EasyLiving.txt'), 'F'));

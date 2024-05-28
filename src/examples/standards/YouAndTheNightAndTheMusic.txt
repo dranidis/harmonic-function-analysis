@@ -1,0 +1,6 @@
+| Cm7      | Dm7b5 G7 | Cm C7    | Fm7 |
+| Dm7b5    | G7       | Cmaj7    |     |
+| Ab7      |          | G7       |     |
+| Ab7      |          | G7 Ab7   | G7  |
+| Cm7      | Dm7b5 G7 | Cm C7    | Fm7 |
+| Dm7b5 G7 | Cm Am7b5 | Dm7b5 G7 | Cm  |

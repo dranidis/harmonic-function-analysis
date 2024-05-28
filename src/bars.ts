@@ -1,3 +1,4 @@
+import * as fs from 'fs';
 class ChordInBar {
   chord: string;
   analyzedChord = '';
@@ -13,6 +14,9 @@ class ChordInBar {
 
 export function processBars(input: string): ChordInBar[] {
   const chords: ChordInBar[] = [];
+  // replace a '|' followed by whitespaces and changes of line and whitespaces and a '|' by a single '|'
+  input = input.replace(/\|\s*\n\s*\|\s*/g, '|'); //
+  
   let bars = input.split('|');
   bars = bars.slice(1);
   for (let bIndex = 0; bIndex < bars.length; bIndex++) {
@@ -83,4 +87,14 @@ export function printBars(
     }
   }
   return output;
+}
+
+export function readChordsFromFile(filename: string): string {
+    try {
+        const data = fs.readFileSync(filename, 'utf8');
+        return data;
+    } catch (err) {
+        console.error(err);
+        return '';
+    }
 }
