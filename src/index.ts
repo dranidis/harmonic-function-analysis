@@ -111,13 +111,9 @@ export class ChordRomanAnalyzer {
     for (let i = 0; i < chords.length; i++) {
       const current = chords[i];
       const previous = i === 0 ? null : chords[i - 1];
-        if (
-          previous &&
-          previous.chord.isMinor &&
-          current.chord.isDominant7
-        ) {
-          previous.updateIIwithNextV(current);
-        }
+      if (previous && previous.chord.isMinor && current.chord.isDominant7) {
+        previous.updateIIwithNextV(current);
+      }
     }
   }
 
@@ -125,12 +121,11 @@ export class ChordRomanAnalyzer {
     for (let i = 0; i < chords.length; i++) {
       const current = chords[i];
       const previous = i === 0 ? null : chords[i - 1];
-      const next: ChordAnalysis | null = i === chords.length - 1 ? null : chords[i + 1];
-        if (
-          previous && next
-        ) {
-          current.updateKeyChanges(previous, next);
-        }
+      const next: ChordAnalysis | null =
+        i === chords.length - 1 ? null : chords[i + 1];
+      if (previous && next) {
+        current.updateKeyChanges(previous, next);
+      }
     }
   }
 
@@ -171,4 +166,9 @@ const a = new ChordRomanAnalyzer()
 
 // console.log(a.analyzeBars(readChordsFromFile('src/examples/standards/WhatIsThisThingCalledLove.txt'), 'C'));
 // console.log(a.analyzeBars(readChordsFromFile('src/examples/standards/SomedayMyPrinceWillCome.txt'), 'Bb'));
-console.log(a.analyzeBars(readChordsFromFile('src/examples/standards/EasyLiving.txt'), 'F'));
+console.log(
+  a.analyzeBars(
+    readChordsFromFile('src/examples/standards/EasyLiving.txt'),
+    'F',
+  ),
+);
